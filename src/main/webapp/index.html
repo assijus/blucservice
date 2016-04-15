@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>Blue Crystal REST Server</title>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script>
+function getFormData($form){
+    var unindexed_array = $form.serializeArray();
+    var indexed_array = {};
+
+    $.map(unindexed_array, function(n, i){
+        indexed_array[n['name']] = n['value'];
+    });
+
+    return indexed_array;
+}
+
+function post(formname) {
+	$.ajax({ 
+		type: 'POST', 
+		url: 'api/v1/' + formname, 
+		data:JSON.stringify(getFormData($('#' + formname))), 
+		success:function(data){document.write(JSON.stringify(data))}, 
+		dataType: 'json', contentType :'application/json' 
+	});
+}
+</script>
+</head>
+
+<body>
+	<h1>Blue Crystal REST Server v1.0</h1>
+
+	<h2>Available Servlets:</h2>
+
+	<table>
+		<tr>
+			<td colspan="2" style="font-weight: bold;"></td>
+		</tr>
+		<tr>
+			<td><h3>Test</h3>
+				<form action="api/test">
+					<input type="submit" value="Test" />
+				</form></td>
+		</tr>
+		<tr>
+			<td><h3>Hash</h3>
+				<form id="hash" action="api/test">
+					<ul>
+						<li><label>policy <input name="policy" value="AD-RB" />
+						</label></li>
+						<li><label>sha1 <input name="sha1"
+								value="EMjARlRD0W9/lr/y1sp3nZf/uUxwKil03dUiOhvd2DU=" /></label></li>
+						<li><label>sha256 <input name="sha256"
+								value="EMjARlRD0W9/lr/y1sp3nZf/uUxwKil03dUiOhvd2DU=" />
+						</label></li>
+						<li><label>time<input name="time"
+								value="2015-09-25T15:15:31.000-03:00" />
+						</label></li>
+						<li><label>certificate<input name="certificate"
+								value="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" /></label></li>
+						<li><label>crl<input name="crl" value="false" /></label></li>
+					</ul>
+					<input type="button" value="Hash" onclick="post('hash')" />
+				</form></td>
+		</tr>
+		<tr>
+			<td><a href="api/v1/envelope">envelope</a></td>
+		</tr>
+		<tr>
+			<td><a href="api/v1/validate">validate</a></td>
+		</tr>
+	</table>
+</body>
+</html>
