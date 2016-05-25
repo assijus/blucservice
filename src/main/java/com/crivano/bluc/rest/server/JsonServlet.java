@@ -19,14 +19,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public abstract class JsonServlet extends HttpServlet {
 	private static final Logger log = Logger.getLogger(Utils.class.getName());
 	private static final Map<String, byte[]> cache = new HashMap<String, byte[]>();
-
-	protected String urlapi;
 
 	@Override
 	protected void doGet(HttpServletRequest request,
@@ -72,8 +71,6 @@ public abstract class JsonServlet extends HttpServlet {
 					return;
 				}
 			}
-
-			urlapi = req.optString("urlapi", null);
 
 			JSONObject resp = new JSONObject();
 			run(request, response, req, resp);
@@ -187,7 +184,15 @@ public abstract class JsonServlet extends HttpServlet {
 			errmsg = message + " - " + errmsg;
 		try {
 			json.put("error", errmsg);
-			json.put("stacktrace", errstack);
+
+			// Error Details
+			JSONArray arr = new JSONArray();
+			JSONObject detail = new JSONObject();
+			detail.put("context", context);
+			detail.put("service", "blucservice");
+			detail.put("stacktrace", errstack);
+			json.put("errordetails", arr);
+
 			response.setStatus(500);
 			writeJsonResp(response, json, context);
 		} catch (Exception e1) {
