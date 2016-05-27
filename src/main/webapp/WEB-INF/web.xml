@@ -5,49 +5,14 @@
 http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	version="2.5">
 	<servlet>
-		<servlet-name>test</servlet-name>
-		<servlet-class>com.crivano.bluc.rest.server.TestServlet</servlet-class>
+		<servlet-name>BluCServlet</servlet-name>
+		<servlet-class>com.crivano.bluc.rest.server.BluCServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>test</servlet-name>
-		<url-pattern>/api/v1/test</url-pattern>
+		<servlet-name>BluCServlet</servlet-name>
+		<url-pattern>/api/v1/*</url-pattern>
 	</servlet-mapping>
 
-	<servlet>
-		<servlet-name>certificate</servlet-name>
-		<servlet-class>com.crivano.bluc.rest.server.CertificateServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>certificate</servlet-name>
-		<url-pattern>/api/v1/certificate</url-pattern>
-	</servlet-mapping>
-
-	<servlet>
-		<servlet-name>hash</servlet-name>
-		<servlet-class>com.crivano.bluc.rest.server.HashServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>hash</servlet-name>
-		<url-pattern>/api/v1/hash</url-pattern>
-	</servlet-mapping>
-
-	<servlet>
-		<servlet-name>envelope</servlet-name>
-		<servlet-class>com.crivano.bluc.rest.server.EnvelopeServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>envelope</servlet-name>
-		<url-pattern>/api/v1/envelope</url-pattern>
-	</servlet-mapping>
-
-	<servlet>
-		<servlet-name>validate</servlet-name>
-		<servlet-class>com.crivano.bluc.rest.server.ValidateServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>validate</servlet-name>
-		<url-pattern>/api/v1/validate</url-pattern>
-	</servlet-mapping>
 
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>

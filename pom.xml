@@ -9,43 +9,6 @@
 	<name>blucservice Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 
-	<repositories>
-		<repository>
-			<id>github</id>
-			<url>https://raw.githubusercontent.com/projeto-siga/siga-repo/master/repo</url>
-		</repository>
-
-		<repository>
-			<id>JBoss Thirdparty Releases</id>
-			<url>http://repository.jboss.org/nexus/content/groups/public-jboss/</url>
-		</repository>
-		<repository>
-			<id>jboss-releases</id>
-			<url>https://repository.jboss.org/nexus/content/repositories/releases/</url>
-		</repository>
-		<repository>
-			<id>JBoss deprecated</id>
-			<url>https://repository.jboss.org/nexus/content/repositories/deprecated</url>
-		</repository>
-
-		<!-- repositorio adicionado para a swetake -->
-		<repository>
-			<id>swetake</id>
-			<url>http://itrc.jju.edu.cn/nexus-2.0.6/content/repositories/thirdparty/</url>
-		</repository>
-
-		<!-- repositorio adicionado para a simplecaptcha -->
-		<repository>
-			<id>simplecaptcha</id>
-			<url>http://maven.nfms4redd.org/</url>
-		</repository>
-		<!-- repositorio adicionado para o dynamic jasper -->
-		<repository>
-			<id>fdvsolution.public</id>
-			<url>http://nexus.fdvs.com.ar/content/groups/public/</url>
-		</repository>
-	</repositories>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.bouncycastle</groupId>
@@ -82,21 +45,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>2.5</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.json</groupId>
-			<artifactId>json</artifactId>
-			<version>20090211</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.mashape.unirest</groupId>
-			<artifactId>unirest-java</artifactId>
-			<version>1.4.7</version>
+			<groupId>com.crivano</groupId>
+			<artifactId>swaggerservlet</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
@@ -115,17 +66,5 @@
 
 	<build>
 		<finalName>blucservice</finalName>
-
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.5.1</version>
-				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
-				</configuration>
-			</plugin>
-		</plugins>
 	</build>
 </project>

@@ -8,13 +8,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.bouncycastle.util.encoders.Base64;
 import org.json.JSONObject;
 
-@SuppressWarnings("serial")
-public class HashServlet extends JsonServlet {
+import com.crivano.restservlet.IRestAction;
+
+public class HashPost implements IRestAction {
 
 	@Override
-	protected void run(HttpServletRequest request,
-			HttpServletResponse response, JSONObject req, JSONObject resp)
-			throws Exception {
+	public void run(HttpServletRequest request, HttpServletResponse response,
+			JSONObject req, JSONObject resp) throws Exception {
 
 		String policy = req.getString("policy");
 		String sha1 = req.getString("sha1");
@@ -50,7 +50,7 @@ public class HashServlet extends JsonServlet {
 	}
 
 	@Override
-	protected String getContext() {
+	public String getContext() {
 		return "bluc-rest";
 	}
 }
