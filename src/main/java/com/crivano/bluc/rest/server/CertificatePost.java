@@ -18,7 +18,7 @@ public class CertificatePost implements ICacheableRestAction {
 		byte[] abCertificate = Base64.decode(certificate);
 
 		CertificateResponse certificateresp = new CertificateResponse();
-		Utils.blucutil.certificado(abCertificate, certificateresp); 
+		Utils.getBlucutil().certificado(abCertificate, certificateresp); 
 
 		resp.put("subject", certificateresp.getSubject());
 		resp.put("cn", certificateresp.getCn());

@@ -51,6 +51,33 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
+  /attach:
+    post:
+      description: Produz uma assinatura PKCS7 attached a partir de um PKCS7 detached e do conteúdo
+      tags: [utils]
+      parameters:
+        - name: envelope
+          in: formData
+          description: Assinatura PKCS7 detached em base64
+          required: true
+          type: string
+          format: byte
+        - name: content
+          in: formData
+          description: Conteúdo em base64
+          required: true
+          type: string
+          format: byte
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/EnvelopeOnly"
+        500:
+          description: Error ocurred
+          schema:
+            $ref: "#/definitions/Error"
+
   /hash:
     post:
       description: Pruduz o pacote composto pelos atributos assináveis
@@ -301,6 +328,12 @@ definitions:
         $ref: "#/definitions/CN"
       certdetails:
         $ref: "#/definitions/CertDetails"
+
+  EnvelopeOnly:
+    type: object
+    properties:
+      envelope:
+        $ref: "#/definitions/EnvelopeB64"
 
   Validate:
     type: object

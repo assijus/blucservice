@@ -10,7 +10,6 @@ import org.json.JSONObject;
 
 import com.crivano.restservlet.ICacheableRestAction;
 
-@SuppressWarnings("serial")
 public class ValidatePost implements ICacheableRestAction {
 
 	@Override
@@ -32,7 +31,7 @@ public class ValidatePost implements ICacheableRestAction {
 
 		// Produce response
 		ValidateResponse validateresp = new ValidateResponse();
-		Utils.blucutil.validateSign(sign, abSha1, abSha256, dtSign, verifyCRL,
+		Utils.getBlucutil().validateSign(sign, abSha1, abSha256, dtSign, verifyCRL,
 				validateresp);
 
 		resp.put("certdetails", validateresp.getCertdetails());

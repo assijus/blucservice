@@ -56,7 +56,7 @@ public class ValidateResponse {
 	}
 
 	public void setPolicy(String policy) {
-		this.policy = policy;
+		this.policy = policy; 
 	}
 
 	public Map<String, String> getCertdetails() {

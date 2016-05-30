@@ -40,7 +40,7 @@ public class EnvelopePost implements IRestAction {
 		boolean verifyCRL = "true".equals(crl);
 
 		EnvelopeResponse enveloperesp = new EnvelopeResponse();
-		Utils.blucutil.validarECompletarPacoteAssinavel(abCertificate, abSha1,
+		Utils.getBlucutil().validarECompletarPacoteAssinavel(abCertificate, abSha1,
 				abSha256, abSignature, fPolicy, dtSign, enveloperesp);
 
 		resp.put("envelope", enveloperesp.getEnvelope());

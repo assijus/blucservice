@@ -37,7 +37,7 @@ public class HashPost implements IRestAction {
 				.getTime();
 		boolean verifyCRL = "true".equals(crl);
 
-		Utils.blucutil.produzPacoteAssinavel(baCertificate, baSha1, baSha256,
+		Utils.getBlucutil().produzPacoteAssinavel(baCertificate, baSha1, baSha256,
 				fPolicy, dtSign, hashresp);
 
 		resp.put("hash", hashresp.getHash());
