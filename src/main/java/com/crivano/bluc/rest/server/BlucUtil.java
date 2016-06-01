@@ -36,6 +36,7 @@ import bluecrystal.domain.SignPolicy;
 import bluecrystal.domain.SignPolicyRef;
 import bluecrystal.domain.StatusConst;
 import bluecrystal.service.exception.InvalidSigntureException;
+import bluecrystal.service.service.ADRBService_21;
 import bluecrystal.service.service.CertificateService;
 import bluecrystal.service.service.CmsWithChainService;
 import bluecrystal.service.service.CryptoService;
@@ -61,6 +62,7 @@ public class BlucUtil {
 	private static final int FALLBACK_LIMIT = 2048;
 
 	private static CmsWithChainService serv1024;
+	private static ADRBService_21 serv2048;
 
 	public BlucUtil() {
 		super();
@@ -69,6 +71,7 @@ public class BlucUtil {
 		certServ = new CertificateService();
 		validatorServ = new Validator();
 		serv1024 = new CmsWithChainService();
+		serv2048 = new ADRBService_21();
 	}
 
 	boolean certificado(byte[] certificado, CertificateResponse resp)
@@ -417,48 +420,102 @@ public class BlucUtil {
 
 	public byte[] attachContentsToPKCS7(byte[] content, byte[] detached)
 			throws Exception {
-		byte[] contentSha1 = getCcServ().calcSha1(content);
+		String policy = obtemPolitica(detached);
+		byte[] origHash = null;
+		byte[] res = null;
+		if (policy == null) {
+			byte[] contentSha1 = getCcServ().calcSha1(content);
 
-		int sts = getCcServ().validateSign(detached, contentSha1, null, false);
-		if (StatusConst.GOOD != sts)
-			throw new Exception("invalid signature: " + getMessageByStatus(sts));
+			int sts = getCcServ().validateSign(detached, contentSha1, null,
+					false);
+			if (StatusConst.GOOD != sts)
+				throw new Exception("invalid signature: "
+						+ getMessageByStatus(sts));
 
-		CMSSignedData s = new CMSSignedData(
-				new CMSProcessableByteArray(content), detached);
+			CMSSignedData s = new CMSSignedData(new CMSProcessableByteArray(
+					content), detached);
 
-		Store certStore = s.getCertificates();
-		Collection certList = certStore.getMatches(null);
+			Store certStore = s.getCertificates();
+			Collection certList = certStore.getMatches(null);
 
-		for (Object next : certList) {
-			X509CertificateHolder holder = (X509CertificateHolder) next;
-			System.out.println(holder.getSubject().toString());
+			for (Object next : certList) {
+				X509CertificateHolder holder = (X509CertificateHolder) next;
+				System.out.println(holder.getSubject().toString());
+			}
+
+			SignerInformationStore signers = s.getSignerInfos();
+			Collection c = signers.getSigners();
+			Iterator it = c.iterator();
+			int verified = 0;
+
+			it.hasNext();
+			SignerInformation signer = (SignerInformation) it.next();
+			Collection certCollection = certStore.getMatches(signer.getSID());
+
+			Iterator certIt = certCollection.iterator();
+			X509CertificateHolder certificateHolder = (X509CertificateHolder) certIt
+					.next();
+			X509Certificate cert = new JcaX509CertificateConverter()
+					.setProvider("BC").getCertificate(certificateHolder);
+
+			signer.verify(new JcaSimpleSignerInfoVerifierBuilder().setProvider(
+					"BC").build(certificateHolder));
+			origHash = signer.getContentDigest();
+			if (!Arrays.equals(origHash, contentSha1))
+				throw new Exception("hashes doesn't match");
+			Date signingTime = null;
+			byte[] sign = signer.getSignature();
+
+			res = composeBodySha1(sign, cert, certList, origHash, signingTime,
+					content.length);
+		} else {
+			byte[] contentSha256 = getCcServ().calcSha256(content);
+
+			// int sts = getCcServ().validateSign(detached, contentSha256, null,
+			// false);
+			// if (StatusConst.GOOD != sts)
+			// throw new Exception("invalid signature with policy: "
+			// + getMessageByStatus(sts));
+
+			CMSSignedData s = new CMSSignedData(new CMSProcessableByteArray(
+					content), detached);
+
+			Store certStore = s.getCertificates();
+			Collection certList = certStore.getMatches(null);
+
+			for (Object next : certList) {
+				X509CertificateHolder holder = (X509CertificateHolder) next;
+				System.out.println(holder.getSubject().toString());
+			}
+
+			SignerInformationStore signers = s.getSignerInfos();
+			Collection c = signers.getSigners();
+			Iterator it = c.iterator();
+			int verified = 0;
+
+			it.hasNext();
+			SignerInformation signer = (SignerInformation) it.next();
+			Collection certCollection = certStore.getMatches(signer.getSID());
+
+			Iterator certIt = certCollection.iterator();
+			X509CertificateHolder certificateHolder = (X509CertificateHolder) certIt
+					.next();
+			X509Certificate cert = new JcaX509CertificateConverter()
+					.setProvider("BC").getCertificate(certificateHolder);
+
+			signer.verify(new JcaSimpleSignerInfoVerifierBuilder().setProvider(
+					"BC").build(certificateHolder));
+			origHash = signer.getContentDigest();
+			// int t = signer.getSignedAttributes();
+			if (!Arrays.equals(origHash, contentSha256))
+				throw new Exception("hashes doesn't match");
+			SignCompare signCompare = ccServ.extractSignCompare(detached);
+			Date signingTime = signCompare.getSigningTime();
+			byte[] sign = signer.getSignature();
+
+			res = composeBodySha256(sign, cert, certList, origHash,
+					signingTime, content.length);
 		}
-
-		SignerInformationStore signers = s.getSignerInfos();
-		Collection c = signers.getSigners();
-		Iterator it = c.iterator();
-		int verified = 0;
-
-		it.hasNext();
-		SignerInformation signer = (SignerInformation) it.next();
-		Collection certCollection = certStore.getMatches(signer.getSID());
-
-		Iterator certIt = certCollection.iterator();
-		X509CertificateHolder certificateHolder = (X509CertificateHolder) certIt
-				.next();
-		X509Certificate cert = new JcaX509CertificateConverter().setProvider(
-				"BC").getCertificate(certificateHolder);
-
-		signer.verify(new JcaSimpleSignerInfoVerifierBuilder()
-				.setProvider("BC").build(certificateHolder));
-		byte[] origHash = signer.getContentDigest();
-		if (!Arrays.equals(origHash, contentSha1))
-			throw new Exception("hashes doesn't match");
-		Date signingTime = null;
-		byte[] sign = signer.getSignature();
-
-		byte[] res = composeBodySha1(sign, cert, certList, origHash,
-				signingTime, content.length);
 
 		Map<String, String> map = createBodyMap(res, content.length);
 
@@ -501,38 +558,39 @@ public class BlucUtil {
 
 		return ret;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see com.ittru.service.CCService#composeBodySha256(byte[],
 	 * java.security.cert.X509Certificate, byte[], java.util.Date)
 	 */
-//	public byte[] composeBodySha256(byte[] sign, X509Certificate c,
-//			byte[] origHash, Date signingTime) throws Exception {
-//		byte[] ret = null;
-//
-//		int idSha = NDX_SHA256;
-//		List<AppSignedInfoEx> listAsiEx = new ArrayList<AppSignedInfoEx>();
-//
-//		byte[] certHash = getCcServ().calcSha256(c.getEncoded());
-//
-//		AppSignedInfoEx asiEx = new AppSignedInfoEx(sign, origHash,
-//				signingTime, c, certHash, idSha);
-//		listAsiEx.add(asiEx);
-//
-//		ret = serv2048.buildCms(listAsiEx, -1);
-//
-//		return ret;
-//	}
+	public byte[] composeBodySha256(byte[] sign, X509Certificate c,
+			Collection certCollection, byte[] origHash, Date signingTime,
+			int attachSize) throws Exception {
+		byte[] ret = null;
+
+		int idSha = NDX_SHA256;
+		List<AppSignedInfoEx> listAsiEx = new ArrayList<AppSignedInfoEx>();
+
+		byte[] certHash = getCcServ().calcSha256(c.getEncoded());
+
+		AppSignedInfoEx asiEx = new AppSignedInfoEx(sign, origHash,
+				signingTime, c, certHash, idSha);
+		listAsiEx.add(asiEx);
+
+		ret = serv2048.buildCms(listAsiEx, attachSize);
+
+		return ret;
+	}
 
 	private Map<String, String> createBodyMap(byte[] res, int contentSize) {
-		boolean foundContent = true;
 		Map<String, String> certMap = new HashMap<String, String>();
 
 		int i = 0;
 		for (; i < res.length; i++) {
 			if (res[i] == (byte) 0xba) {
+				boolean foundContent = true;
 				for (int j = 0; j < contentSize; j++) {
 					if (res[j + i] != (byte) 0xba) {
 						foundContent = false;
