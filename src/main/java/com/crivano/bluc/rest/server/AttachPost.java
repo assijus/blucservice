@@ -1,8 +1,5 @@
 package com.crivano.bluc.rest.server;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.bouncycastle.util.encoders.Base64;
 import org.json.JSONObject;
 
@@ -11,8 +8,7 @@ import com.crivano.restservlet.IRestAction;
 public class AttachPost implements IRestAction {
 
 	@Override
-	public void run(HttpServletRequest request, HttpServletResponse response,
-			JSONObject req, JSONObject resp) throws Exception {
+	public void run(JSONObject req, JSONObject resp) throws Exception {
 
 		String detachedB64 = req.getString("envelope");
 		String contentB64 = req.getString("content");

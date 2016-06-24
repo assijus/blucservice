@@ -2,9 +2,6 @@ package com.crivano.bluc.rest.server;
 
 import java.util.Date;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.bouncycastle.util.encoders.Base64;
 import org.json.JSONObject;
 
@@ -13,8 +10,7 @@ import com.crivano.restservlet.ICacheableRestAction;
 public class ValidatePost implements ICacheableRestAction {
 
 	@Override
-	public void run(HttpServletRequest request, HttpServletResponse response,
-			JSONObject req, JSONObject resp) throws Exception {
+	public void run(JSONObject req, JSONObject resp) throws Exception {
 
 		String envelope = req.getString("envelope");
 		String sha1 = req.getString("sha1");
@@ -31,8 +27,8 @@ public class ValidatePost implements ICacheableRestAction {
 
 		// Produce response
 		ValidateResponse validateresp = new ValidateResponse();
-		Utils.getBlucutil().validateSign(sign, abSha1, abSha256, dtSign, verifyCRL,
-				validateresp);
+		Utils.getBlucutil().validateSign(sign, abSha1, abSha256, dtSign,
+				verifyCRL, validateresp);
 
 		resp.put("certdetails", validateresp.getCertdetails());
 		resp.put("cn", validateresp.getCn());

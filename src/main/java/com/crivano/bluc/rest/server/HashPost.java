@@ -2,9 +2,6 @@ package com.crivano.bluc.rest.server;
 
 import java.util.Date;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.bouncycastle.util.encoders.Base64;
 import org.json.JSONObject;
 
@@ -13,8 +10,7 @@ import com.crivano.restservlet.IRestAction;
 public class HashPost implements IRestAction {
 
 	@Override
-	public void run(HttpServletRequest request, HttpServletResponse response,
-			JSONObject req, JSONObject resp) throws Exception {
+	public void run(JSONObject req, JSONObject resp) throws Exception {
 
 		String policy = req.getString("policy");
 		String sha1 = req.getString("sha1");
@@ -37,8 +33,8 @@ public class HashPost implements IRestAction {
 				.getTime();
 		boolean verifyCRL = "true".equals(crl);
 
-		Utils.getBlucutil().produzPacoteAssinavel(baCertificate, baSha1, baSha256,
-				fPolicy, dtSign, hashresp);
+		Utils.getBlucutil().produzPacoteAssinavel(baCertificate, baSha1,
+				baSha256, fPolicy, dtSign, hashresp);
 
 		resp.put("hash", hashresp.getHash());
 		resp.put("cn", hashresp.getCn());
