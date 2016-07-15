@@ -36,6 +36,7 @@ public class ValidatePost implements ICacheableRestAction {
 		resp.put("policyversion", validateresp.getPolicyversion());
 		resp.put("policyoid", validateresp.getPolicyoid());
 		resp.put("error", validateresp.getError());
+		resp.put("status", validateresp.getStatus());
 	}
 
 	@Override

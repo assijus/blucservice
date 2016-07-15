@@ -283,13 +283,7 @@ public class BlucUtil {
 
 	private boolean validateSignatureByPolicy(byte[] sign, byte[] ps)
 			throws Exception {
-		SignCompare sc = getCcServ().extractSignCompare(sign);
-		if (ps == null) {
-			ps = bluecrystal.service.helper.Utils.getfromUrl(sc.getPsUrl());
-		}
-		SignPolicyRef spr = getCcServ().extractVerifyRefence(ps);
-
-		return getCcServ().validateSignatureByPolicy(spr, sc);
+		return ccServ.validateSignatureByPolicy(sign, ps);
 	}
 
 	private X509Certificate loadCert(byte[] certEnc)
@@ -354,7 +348,8 @@ public class BlucUtil {
 		if (politica == null) {
 			int signOk = getCcServ().validateSign(assinatura, sha1,
 					dtAssinatura, verificarLCRs);
-			if (signOk != StatusConst.GOOD) {
+			resp.setStatus(getMessageByStatus(signOk));
+			if (signOk != StatusConst.GOOD && signOk != StatusConst.UNKNOWN) {
 				resp.setError("Não foi possível validar a assinatura digital: "
 						+ getMessageByStatus(signOk));
 			}
@@ -374,7 +369,8 @@ public class BlucUtil {
 
 			int signOk = getCcServ().validateSign(assinatura, origHash,
 					dtAssinatura, verificarLCRs);
-			if (signOk != StatusConst.GOOD) {
+			resp.setStatus(getMessageByStatus(signOk));
+			if (signOk != StatusConst.GOOD && signOk != StatusConst.UNKNOWN) {
 				resp.setError("Não foi possível validar a assinatura digital: "
 						+ getMessageByStatus(signOk));
 				return signOk;
@@ -428,7 +424,7 @@ public class BlucUtil {
 
 			int sts = getCcServ().validateSign(detached, contentSha1, null,
 					false);
-			if (StatusConst.GOOD != sts)
+			if (StatusConst.GOOD != sts && StatusConst.UNKNOWN != sts)
 				throw new Exception("invalid signature: "
 						+ getMessageByStatus(sts));
 
@@ -438,10 +434,10 @@ public class BlucUtil {
 			Store certStore = s.getCertificates();
 			Collection certList = certStore.getMatches(null);
 
-			for (Object next : certList) {
-				X509CertificateHolder holder = (X509CertificateHolder) next;
-				System.out.println(holder.getSubject().toString());
-			}
+//			for (Object next : certList) {
+//				X509CertificateHolder holder = (X509CertificateHolder) next;
+//				System.out.println(holder.getSubject().toString());
+//			}
 
 			SignerInformationStore signers = s.getSignerInfos();
 			Collection c = signers.getSigners();
@@ -473,7 +469,7 @@ public class BlucUtil {
 
 			// int sts = getCcServ().validateSign(detached, contentSha256, null,
 			// false);
-			// if (StatusConst.GOOD != sts)
+			// if (StatusConst.GOOD != sts && StatusConst.UNKNOWN != sts)
 			// throw new Exception("invalid signature with policy: "
 			// + getMessageByStatus(sts));
 
@@ -483,10 +479,10 @@ public class BlucUtil {
 			Store certStore = s.getCertificates();
 			Collection certList = certStore.getMatches(null);
 
-			for (Object next : certList) {
-				X509CertificateHolder holder = (X509CertificateHolder) next;
-				System.out.println(holder.getSubject().toString());
-			}
+//			for (Object next : certList) {
+//				X509CertificateHolder holder = (X509CertificateHolder) next;
+//				//System.out.println(holder.getSubject().toString());
+//			}
 
 			SignerInformationStore signers = s.getSignerInfos();
 			Collection c = signers.getSigners();
@@ -531,7 +527,7 @@ public class BlucUtil {
 				+ content.length, envelope_2.length);
 
 		int sts2 = getCcServ().validateSign(attached, origHash, null, false);
-		if (StatusConst.GOOD != sts2)
+		if (StatusConst.GOOD != sts2 && StatusConst.UNKNOWN != sts2)
 			throw new Exception("invalid attached signature: "
 					+ getMessageByStatus(sts2));
 
