@@ -434,10 +434,10 @@ public class BlucUtil {
 			Store certStore = s.getCertificates();
 			Collection certList = certStore.getMatches(null);
 
-//			for (Object next : certList) {
-//				X509CertificateHolder holder = (X509CertificateHolder) next;
-//				System.out.println(holder.getSubject().toString());
-//			}
+			// for (Object next : certList) {
+			// X509CertificateHolder holder = (X509CertificateHolder) next;
+			// System.out.println(holder.getSubject().toString());
+			// }
 
 			SignerInformationStore signers = s.getSignerInfos();
 			Collection c = signers.getSigners();
@@ -479,10 +479,10 @@ public class BlucUtil {
 			Store certStore = s.getCertificates();
 			Collection certList = certStore.getMatches(null);
 
-//			for (Object next : certList) {
-//				X509CertificateHolder holder = (X509CertificateHolder) next;
-//				//System.out.println(holder.getSubject().toString());
-//			}
+			// for (Object next : certList) {
+			// X509CertificateHolder holder = (X509CertificateHolder) next;
+			// //System.out.println(holder.getSubject().toString());
+			// }
 
 			SignerInformationStore signers = s.getSignerInfos();
 			Collection c = signers.getSigners();
@@ -513,24 +513,37 @@ public class BlucUtil {
 					signingTime, content.length);
 		}
 
-		Map<String, String> map = createBodyMap(res, content.length);
+		int sts2 = StatusConst.INVALID_SIGN;
+		byte[] attached = null;
+		Exception savedException = null;
+		for (int delta = 0; delta < 4; delta++) {
+			try {
+				Map<String, String> map = createBodyMap(res, content.length, delta);
+				byte[] envelope_1 = Base64.decode(map.get("envelope_1"));
+				byte[] envelope_2 = Base64.decode(map.get("envelope_2"));
 
-		byte[] envelope_1 = Base64.decode(map.get("envelope_1"));
-		byte[] envelope_2 = Base64.decode(map.get("envelope_2"));
+				attached = new byte[envelope_1.length + content.length
+						+ envelope_2.length];
+				System.arraycopy(envelope_1, 0, attached, 0, envelope_1.length);
+				System.arraycopy(content, 0, attached, envelope_1.length,
+						content.length);
+				System.arraycopy(envelope_2, 0, attached, envelope_1.length
+						+ content.length, envelope_2.length);
 
-		byte[] attached = new byte[envelope_1.length + content.length
-				+ envelope_2.length];
-		System.arraycopy(envelope_1, 0, attached, 0, envelope_1.length);
-		System.arraycopy(content, 0, attached, envelope_1.length,
-				content.length);
-		System.arraycopy(envelope_2, 0, attached, envelope_1.length
-				+ content.length, envelope_2.length);
-
-		int sts2 = getCcServ().validateSign(attached, origHash, null, false);
+				sts2 = getCcServ()
+						.validateSign(attached, origHash, null, false);
+				savedException = null;
+				break;
+			} catch (Exception ioe) {
+				if (savedException == null)
+					savedException = ioe;
+			}
+		}
+		if (savedException != null)
+			throw savedException;
 		if (StatusConst.GOOD != sts2 && StatusConst.UNKNOWN != sts2)
 			throw new Exception("invalid attached signature: "
 					+ getMessageByStatus(sts2));
-
 		return attached;
 	}
 
@@ -580,7 +593,8 @@ public class BlucUtil {
 		return ret;
 	}
 
-	private Map<String, String> createBodyMap(byte[] res, int contentSize) {
+	private Map<String, String> createBodyMap(byte[] res, int contentSize,
+			int delta) {
 		Map<String, String> certMap = new HashMap<String, String>();
 
 		int i = 0;
@@ -598,6 +612,7 @@ public class BlucUtil {
 				}
 			}
 		}
+		i += delta;
 		int begin = 0;
 		int end = i;
 		byte[] record = new byte[end - begin];
