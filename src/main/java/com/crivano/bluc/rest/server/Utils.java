@@ -5,8 +5,6 @@ import java.util.logging.Logger;
 public class Utils {
 	private static BlucUtil blucutil = new BlucUtil();
 
-	private static final Logger log = Logger.getLogger(Utils.class.getName());
-
 	final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();
 
 	public static String bytesToHex(byte[] bytes) {
