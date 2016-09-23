@@ -30,6 +30,7 @@ public class ValidatePost implements ICacheableRestAction {
 		Utils.getBlucutil().validateSign(sign, abSha1, abSha256, dtSign,
 				verifyCRL, validateresp);
 
+		resp.put("certificate", validateresp.getCertificate());
 		resp.put("certdetails", validateresp.getCertdetails());
 		resp.put("cn", validateresp.getCn());
 		resp.put("policy", validateresp.getPolicy());

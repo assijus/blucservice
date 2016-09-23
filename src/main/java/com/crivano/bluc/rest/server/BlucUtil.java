@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import java.security.cert.Certificate;
+
 import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.cms.CMSProcessableByteArray;
@@ -196,6 +198,13 @@ public class BlucUtil {
 		return new String(Base64.encode(ret));
 	}
 
+	public X509Certificate extractCert(byte[] assinatura) throws Exception {
+		ByteArrayInputStream bais = new ByteArrayInputStream(assinatura);
+		CertificateFactory cf = CertificateFactory.getInstance("X509");
+		Certificate cert = cf.generateCertificate(bais);
+		return (X509Certificate) cert;
+	}
+
 	private String composeEnvelopeADRB10(byte[] sign, byte[] x509,
 			byte[] origHash, Date signingTime) throws Exception {
 		X509Certificate cert = loadCert(x509);
@@ -342,9 +351,10 @@ public class BlucUtil {
 		X509Certificate certEE = certServ.decodeEE(assinatura);
 
 		byte[] certificate = certEE.getEncoded();
+		resp.setCertificate(new String(Base64.encode(certificate)));
 		resp.setCn(obterNomeExibicao(getCN(certificate)));
 		setDetails(certificate, resp.getCertdetails());
-
+		
 		if (politica == null) {
 			int signOk = getCcServ().validateSign(assinatura, sha1,
 					dtAssinatura, verificarLCRs);
@@ -518,7 +528,8 @@ public class BlucUtil {
 		Exception savedException = null;
 		for (int delta = 0; delta < 4; delta++) {
 			try {
-				Map<String, String> map = createBodyMap(res, content.length, delta);
+				Map<String, String> map = createBodyMap(res, content.length,
+						delta);
 				byte[] envelope_1 = Base64.decode(map.get("envelope_1"));
 				byte[] envelope_2 = Base64.decode(map.get("envelope_2"));
 

@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class ValidateResponse {
+	private String certificate;
 	private String status;
 	private String cn;
 	private String policy;
@@ -74,5 +75,13 @@ public class ValidateResponse {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public String getCertificate() {
+		return certificate;
+	}
+
+	public void setCertificate(String certificate) {
+		this.certificate = certificate;
 	}
 }
