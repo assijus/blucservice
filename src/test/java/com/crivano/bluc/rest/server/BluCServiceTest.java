@@ -3,7 +3,21 @@ package com.crivano.bluc.rest.server;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.crivano.bluc.rest.server.IBlueCrystal.AttachPostRequest;
+import com.crivano.bluc.rest.server.IBlueCrystal.AttachPostResponse;
+import com.crivano.bluc.rest.server.IBlueCrystal.CertDetails;
+import com.crivano.bluc.rest.server.IBlueCrystal.CertificatePostRequest;
+import com.crivano.bluc.rest.server.IBlueCrystal.CertificatePostResponse;
+import com.crivano.bluc.rest.server.IBlueCrystal.EnvelopePostRequest;
+import com.crivano.bluc.rest.server.IBlueCrystal.EnvelopePostResponse;
+import com.crivano.bluc.rest.server.IBlueCrystal.HashPostRequest;
+import com.crivano.bluc.rest.server.IBlueCrystal.HashPostResponse;
+import com.crivano.bluc.rest.server.IBlueCrystal.TestGetRequest;
+import com.crivano.bluc.rest.server.IBlueCrystal.TestGetResponse;
+import com.crivano.bluc.rest.server.IBlueCrystal.ValidatePostRequest;
+import com.crivano.bluc.rest.server.IBlueCrystal.ValidatePostResponse;
 import com.crivano.swaggerservlet.SwaggerTestSupport;
+import com.crivano.swaggerservlet.SwaggerUtils;
 
 public class BluCServiceTest extends SwaggerTestSupport {
 	String certificate = "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";
@@ -22,99 +36,112 @@ public class BluCServiceTest extends SwaggerTestSupport {
 	}
 
 	public void testTest_Simple_Success() throws JSONException {
-		JSONObject resp = run("GET", "/test", null);
-		assertEquals("OK", resp.get("status"));
-		assertEquals("Blue Crystal REST", resp.get("provider"));
-		assertEquals("1.0", resp.get("version"));
+		TestGetRequest req = new TestGetRequest();
+		TestGetResponse resp = new TestGetResponse();
+		run("GET", "/test", req, resp);
+		assertEquals("OK", resp.status);
+		assertEquals("Blue Crystal REST", resp.provider);
+		assertEquals("1.0", resp.version);
 	}
 
 	public void testCertificate_Simple_Success() throws JSONException {
-		JSONObject req = new JSONObject();
-		req.put("certificate", certificate);
-		JSONObject resp = run("POST", "/certificate", req);
+		CertificatePostRequest req = new CertificatePostRequest();
+		CertificatePostResponse resp = new CertificatePostResponse();
 
-		assertEquals("RENATO DO AMARAL CRIVANO MACHADO:RJ13635", resp.get("cn"));
+		req.certificate = SwaggerUtils.base64Decode(certificate);
+		run("POST", "/certificate", req, resp);
+
+		assertEquals("RENATO DO AMARAL CRIVANO MACHADO:RJ13635", resp.cn);
 		assertEquals(
 				"CN=RENATO DO AMARAL CRIVANO MACHADO:RJ13635, OU=SERVIDOR, OU=SECAO JUDICIARIA RIO DE JANEIRO-SJRJ, OU=Autoridade Certificadora da Justica - ACJUS v4, OU=Cert-JUS Institucional - A3, O=ICP-Brasil, C=BR",
-				resp.get("subject"));
-		assertEquals("RENATO DO AMARAL CRIVANO MACHADO", resp.get("name"));
-		assertEquals("00489623760", resp.get("cpf"));
-		assertTrue(resp.get("certdetails") instanceof JSONObject);
-		assertTrue(resp.optString("error", null) == null);
+				resp.subject);
+		assertEquals("RENATO DO AMARAL CRIVANO MACHADO", resp.name);
+		assertEquals("00489623760", resp.cpf);
+		assertEquals(resp.certdetails.cpf0, resp.cpf);
 	}
 
 	public void testHash_Simple_Success() throws JSONException {
-		JSONObject req = new JSONObject();
-		req.put("certificate", certificate);
-		req.put("policy", "AD-RB");
-		req.put("sha1", "EMjARlRD0W9/lr/y1sp3nZf/uUxwKil03dUiOhvd2DU=");
-		req.put("sha256", "EMjARlRD0W9/lr/y1sp3nZf/uUxwKil03dUiOhvd2DU=");
-		req.put("time", "2015-09-25T15:15:31.000-03:00");
-		req.put("crl", "true");
-		JSONObject resp = run("POST", "/hash", req);
+		HashPostRequest req = new HashPostRequest();
+		HashPostResponse resp = new HashPostResponse();
 
-		assertEquals(hashADRB21, resp.get("hash"));
-		assertEquals("RENATO DO AMARAL CRIVANO MACHADO", resp.get("cn")); // trocar
-																			// por
-																			// "name"
-		assertEquals("AD-RB", resp.get("policy"));
-		assertEquals("2.16.76.1.7.1.1.2.1", resp.get("policyoid"));
-		assertEquals("2.1", resp.get("policyversion"));
-		assertTrue(resp.get("certdetails") instanceof JSONObject);
-		assertTrue(resp.optString("error", null) == null);
+		req.certificate = SwaggerUtils.base64Decode(certificate);
+		req.policy = "AD-RB";
+		req.sha1 = SwaggerUtils
+				.base64Decode("EMjARlRD0W9/lr/y1sp3nZf/uUxwKil03dUiOhvd2DU=");
+		req.sha256 = SwaggerUtils
+				.base64Decode("EMjARlRD0W9/lr/y1sp3nZf/uUxwKil03dUiOhvd2DU=");
+		req.time = javax.xml.bind.DatatypeConverter.parseDateTime(
+				"2015-09-25T15:15:31.000-03:00").getTime();
+		req.crl = false;
+		run("POST", "/hash", req, resp);
+
+		assertEquals(hashADRB21, SwaggerUtils.base64Encode(resp.hash));
+		assertEquals("RENATO DO AMARAL CRIVANO MACHADO", resp.cn);
+		assertEquals("AD-RB", resp.policy);
+		assertEquals("2.16.76.1.7.1.1.2.1", resp.policyoid);
+		assertEquals("2.1", resp.policyversion);
+		assertTrue(resp.certdetails instanceof CertDetails);
+		// assertTrue(resp.error == null);
 	}
 
 	public void testEnvelope_ADRB21_Success() throws JSONException {
-		JSONObject req = new JSONObject();
-		req.put("certificate", certificate);
-		req.put("policy", "AD-RB");
-		req.put("signature", signatureADRB21);
-		req.put("sha1", "EMjARlRD0W9/lr/y1sp3nZf/uUxwKil03dUiOhvd2DU=");
-		req.put("sha256", "EMjARlRD0W9/lr/y1sp3nZf/uUxwKil03dUiOhvd2DU=");
-		req.put("time", "2015-09-25T15:15:31.000-03:00");
-		req.put("crl", "true");
-		JSONObject resp = run("POST", "/envelope", req);
+		EnvelopePostRequest req = new EnvelopePostRequest();
+		EnvelopePostResponse resp = new EnvelopePostResponse();
 
-		assertEquals(envelopeADRB21, resp.get("envelope"));
-		assertEquals("RENATO DO AMARAL CRIVANO MACHADO", resp.get("cn")); // trocar
-																			// por
-																			// "name"
-		assertEquals("AD-RB", resp.get("policy"));
-		assertEquals("2.16.76.1.7.1.1.2.1", resp.get("policyoid"));
-		assertEquals("2.1", resp.get("policyversion"));
-		assertTrue(resp.get("certdetails") instanceof JSONObject);
-		assertTrue(resp.optString("error", null) == null);
+		req.certificate = SwaggerUtils.base64Decode(certificate);
+		req.policy = "AD-RB";
+		req.signature = SwaggerUtils.base64Decode(signatureADRB21);
+		req.sha1 = SwaggerUtils
+				.base64Decode("EMjARlRD0W9/lr/y1sp3nZf/uUxwKil03dUiOhvd2DU=");
+		req.sha256 = SwaggerUtils
+				.base64Decode("EMjARlRD0W9/lr/y1sp3nZf/uUxwKil03dUiOhvd2DU=");
+		req.time = javax.xml.bind.DatatypeConverter.parseDateTime(
+				"2015-09-25T15:15:31.000-03:00").getTime();
+		req.crl = false;
+
+		run("POST", "/envelope", req, resp);
+
+		assertEquals(envelopeADRB21, SwaggerUtils.base64Encode(resp.envelope));
+		assertEquals("RENATO DO AMARAL CRIVANO MACHADO", resp.cn);
+		assertEquals("AD-RB", resp.policy);
+		assertEquals("2.16.76.1.7.1.1.2.1", resp.policyoid);
+		assertEquals("2.1", resp.policyversion);
+		assertTrue(resp.certdetails instanceof CertDetails);
 	}
 
 	public void testValidate_ADRB21_Success() throws JSONException {
-		JSONObject req = new JSONObject();
-		req.put("certificate", certificate);
-		req.put("policy", "AD-RB");
-		req.put("envelope", envelopeADRB21);
-		req.put("sha1", "EMjARlRD0W9/lr/y1sp3nZf/uUxwKil03dUiOhvd2DU=");
-		req.put("sha256", "EMjARlRD0W9/lr/y1sp3nZf/uUxwKil03dUiOhvd2DU=");
-		req.put("time", "2015-09-25T15:15:31.000-03:00");
-		req.put("crl", "true");
-		JSONObject resp = run("POST", "/validate", req);
+		ValidatePostRequest req = new ValidatePostRequest();
+		ValidatePostResponse resp = new ValidatePostResponse();
 
-		assertEquals("RENATO DO AMARAL CRIVANO MACHADO", resp.get("cn")); // trocar
-																			// por
-																			// "name"
-		assertEquals("AD-RB", resp.get("policy"));
-		assertEquals("2.16.76.1.7.1.1.2.1", resp.get("policyoid"));
-		assertEquals("2.1", resp.get("policyversion"));
-		assertTrue(resp.get("certdetails") instanceof JSONObject);
-		assertTrue(resp.optString("error", null) == null);
+		req.envelope = SwaggerUtils.base64Decode(envelopeADRB21);
+		req.sha1 = SwaggerUtils
+				.base64Decode("EMjARlRD0W9/lr/y1sp3nZf/uUxwKil03dUiOhvd2DU=");
+		req.sha256 = SwaggerUtils
+				.base64Decode("EMjARlRD0W9/lr/y1sp3nZf/uUxwKil03dUiOhvd2DU=");
+		req.time = javax.xml.bind.DatatypeConverter.parseDateTime(
+				"2015-09-25T15:15:31.000-03:00").getTime();
+		req.crl = false;
+		run("POST", "/validate", req, resp);
+
+		// TODO: trocar por "name"
+		assertEquals("RENATO DO AMARAL CRIVANO MACHADO", resp.cn);
+		assertEquals("AD-RB", resp.policy);
+		assertEquals("2.16.76.1.7.1.1.2.1", resp.policyoid);
+		assertEquals("2.1", resp.policyversion);
+		assertTrue(resp.certdetails instanceof CertDetails);
+		assertTrue(resp.error == null);
 	}
 
 	public void testAttach_PKCS7_Success() throws JSONException {
-		JSONObject req = new JSONObject();
-		req.put("envelope", attachPKCS7detached);
-		req.put("content", attachPKCS7content);
-		JSONObject resp = run("POST", "/attach", req);
+		AttachPostRequest req = new AttachPostRequest();
+		AttachPostResponse resp = new AttachPostResponse();
 
-		assertEquals(attachPKCS7attached, resp.get("envelope"));
-		assertEquals(attachPKCS7sha256hex, resp.get("sha256hex"));
-		assertTrue(resp.optString("error", null) == null);
+		req.envelope = SwaggerUtils.base64Decode(attachPKCS7detached);
+		req.content = SwaggerUtils.base64Decode(attachPKCS7content);
+		run("POST", "/attach", req, resp);
+
+		assertEquals(attachPKCS7attached,
+				SwaggerUtils.base64Encode(resp.envelope));
+		assertEquals(attachPKCS7sha256hex, resp.sha256hex);
 	}
 }

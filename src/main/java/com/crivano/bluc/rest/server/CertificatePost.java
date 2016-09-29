@@ -1,32 +1,42 @@
 package com.crivano.bluc.rest.server;
 
-import org.bouncycastle.util.encoders.Base64;
-import org.json.JSONObject;
+import java.util.Map;
 
-import com.crivano.restservlet.ICacheableRestAction;
+import com.crivano.bluc.rest.server.IBlueCrystal.CertDetails;
+import com.crivano.bluc.rest.server.IBlueCrystal.CertificatePostRequest;
+import com.crivano.bluc.rest.server.IBlueCrystal.CertificatePostResponse;
+import com.crivano.bluc.rest.server.IBlueCrystal.ICertificatePost;
+import com.crivano.swaggerservlet.ISwaggerCacheableMethod;
+import com.crivano.swaggerservlet.Swagger;
 
-public class CertificatePost implements ICacheableRestAction {
-
-	@Override
-	public void run(JSONObject req, JSONObject resp) throws Exception {
-		String certificate = req.getString("certificate");
-
-		byte[] abCertificate = Base64.decode(certificate);
-
-		CertificateResponse certificateresp = new CertificateResponse();
-		Utils.getBlucutil().certificado(abCertificate, certificateresp);
-
-		resp.put("subject", certificateresp.getSubject());
-		resp.put("cn", certificateresp.getCn());
-		resp.put("name", certificateresp.getName());
-		resp.put("cpf", certificateresp.getCpf());
-		resp.put("error", certificateresp.getError());
-		resp.put("certdetails", certificateresp.getCertdetails());
-	}
+public class CertificatePost implements ICertificatePost,
+		ISwaggerCacheableMethod {
 
 	@Override
 	public String getContext() {
 		return "bluc-certificate";
 	}
 
+	@Override
+	public void run(CertificatePostRequest req, CertificatePostResponse resp)
+			throws Exception {
+		CertificateResponse certificateresp = new CertificateResponse();
+		Utils.getBlucutil().certificado(req.certificate, certificateresp);
+
+		resp.subject = certificateresp.getSubject();
+		resp.cn = certificateresp.getCn();
+		resp.name = certificateresp.getName();
+		resp.cpf = certificateresp.getCpf();
+
+		resp.certdetails = new CertDetails();
+		fillCertificateDetails(resp.certdetails,
+				certificateresp.getCertdetails());
+	}
+
+	public static void fillCertificateDetails(CertDetails certdetails,
+			Map<String, String> map) throws Exception {
+		for (String key : map.keySet()) {
+			Swagger.set(certdetails, key, map.get(key));
+		}
+	}
 }

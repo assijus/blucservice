@@ -5,48 +5,40 @@ import java.util.Date;
 import org.bouncycastle.util.encoders.Base64;
 import org.json.JSONObject;
 
-import com.crivano.restservlet.IRestAction;
+import com.crivano.bluc.rest.server.IBlueCrystal.CertDetails;
+import com.crivano.bluc.rest.server.IBlueCrystal.HashPostRequest;
+import com.crivano.bluc.rest.server.IBlueCrystal.HashPostResponse;
+import com.crivano.bluc.rest.server.IBlueCrystal.IHashPost;
+import com.crivano.swaggerservlet.SwaggerUtils;
 
-public class HashPost implements IRestAction {
-
-	@Override
-	public void run(JSONObject req, JSONObject resp) throws Exception {
-
-		String policy = req.getString("policy");
-		String sha1 = req.getString("sha1");
-		String sha256 = req.getString("sha256");
-		String time = req.getString("time");
-		String certificate = req.getString("certificate");
-		String crl = req.getString("crl");
-
-		// Produce response
-		HashResponse hashresp = new HashResponse();
-		if (!("AD-RB".equals(policy) || "PKCS#7".equals(policy)))
-			throw new Exception(
-					"Parameter 'policy' should be either 'AD-RB' or 'PKCS#7'");
-
-		boolean fPolicy = "AD-RB".equals(policy);
-		byte[] baCertificate = Base64.decode(certificate);
-		byte[] baSha1 = Base64.decode(sha1);
-		byte[] baSha256 = Base64.decode(sha256);
-		Date dtSign = javax.xml.bind.DatatypeConverter.parseDateTime(time)
-				.getTime();
-		boolean verifyCRL = "true".equals(crl);
-
-		Utils.getBlucutil().produzPacoteAssinavel(baCertificate, baSha1,
-				baSha256, fPolicy, dtSign, hashresp);
-
-		resp.put("hash", hashresp.getHash());
-		resp.put("cn", hashresp.getCn());
-		resp.put("policy", hashresp.getPolicy());
-		resp.put("policyversion", hashresp.getPolicyversion());
-		resp.put("policyoid", hashresp.getPolicyoid());
-		resp.put("error", hashresp.getError());
-		resp.put("certdetails", hashresp.getCertdetails());
-	}
+public class HashPost implements IHashPost {
 
 	@Override
 	public String getContext() {
 		return "bluc-rest";
+	}
+
+	@Override
+	public void run(HashPostRequest req, HashPostResponse resp)
+			throws Exception {
+
+		// Produce response
+		HashResponse hashresp = new HashResponse();
+		if (!("AD-RB".equals(req.policy) || "PKCS#7".equals(req.policy)))
+			throw new Exception(
+					"Parameter 'policy' should be either 'AD-RB' or 'PKCS#7'");
+
+		Utils.getBlucutil().produzPacoteAssinavel(req.certificate, req.sha1,
+				req.sha256, "AD-RB".equals(req.policy), req.time, hashresp);
+
+		resp.hash = SwaggerUtils.base64Decode(hashresp.getHash());
+		resp.cn = hashresp.getCn();
+		resp.policy = hashresp.getPolicy();
+		resp.policyversion = hashresp.getPolicyversion();
+		resp.policyoid = hashresp.getPolicyoid();
+		// resp.error = hashresp.getError();
+		resp.certdetails = new CertDetails();
+		CertificatePost.fillCertificateDetails(resp.certdetails,
+				hashresp.getCertdetails());
 	}
 }

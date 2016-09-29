@@ -1,4 +1,4 @@
-swagger: '2.0'
+﻿swagger: '2.0'
 
 info:
   version: "1.0.0"
@@ -29,7 +29,18 @@ paths:
         200:
           description: Successful response
           schema:
-            $ref: "#/definitions/Test"
+            type: object
+            properties:
+              provider:
+                type: string
+              version:
+                type: string
+              status:
+                type: string
+            example:
+              provider: Blue Crystal REST
+              version: version
+              status: OK
         500:
           description: Error ocurred
           schema:
@@ -45,7 +56,27 @@ paths:
         200:
           description: Successful response
           schema:
-            $ref: "#/definitions/Certificate"
+            type: object
+            properties:
+              cn:
+                type: string
+                description: Common Name
+              name:
+                type: string
+                description: Nome
+              subject:
+                type: string
+                description: Subject
+              cpf:
+                type: string
+                description: CPF
+              certdetails:
+                $ref: "#/definitions/CertDetails"
+            example:
+              cn: RENATO DO AMARAL CRIVANO MACHADO:RJ13635
+              name: RENATO DO AMARAL CRIVANO MACHADO
+              subject: CN=RENATO DO AMARAL CRIVANO MACHADO:RJ13635, OU=SERVIDOR, OU=SECAO JUDICIARIA RIO DE JANEIRO-SJRJ, OU=Autoridade Certificadora da Justica - ACJUS v4, OU=Cert-JUS Institucional - A3, O=ICP-Brasil, C=BR
+              cpf: 00489623760
         500:
           description: Error ocurred
           schema:
@@ -72,7 +103,12 @@ paths:
         200:
           description: Successful response
           schema:
-            $ref: "#/definitions/EnvelopeOnly"
+            type: object
+            properties:
+              envelope:
+                $ref: "#/definitions/EnvelopeB64"
+              sha256hex:
+                $ref: "#/definitions/Sha256Hex"
         500:
           description: Error ocurred
           schema:
@@ -93,7 +129,20 @@ paths:
         200:
           description: Successful response
           schema:
-            $ref: "#/definitions/Hash"
+            type: object
+            properties:
+              hash:
+                $ref: "#/definitions/HashB64"
+              policy:
+                $ref: "#/definitions/Policy"
+              policyversion:
+                $ref: "#/definitions/PolicyVersion"
+              policyoid:
+                $ref: "#/definitions/PolicyOID"
+              cn:
+                $ref: "#/definitions/CN"
+              certdetails:
+                $ref: "#/definitions/CertDetails"
         500:
           description: Error ocurred
           schema:
@@ -115,7 +164,20 @@ paths:
         200:
           description: Successful response
           schema:
-            $ref: "#/definitions/Envelope"
+            type: object
+            properties:
+              envelope:
+                $ref: "#/definitions/EnvelopeB64"
+              policy:
+                $ref: "#/definitions/Policy"
+              policyversion:
+                $ref: "#/definitions/PolicyVersion"
+              policyoid:
+                $ref: "#/definitions/PolicyOID"
+              cn:
+                $ref: "#/definitions/CN"
+              certdetails:
+                $ref: "#/definitions/CertDetails"
         500:
           description: Error ocurred
           schema:
@@ -130,11 +192,27 @@ paths:
         - $ref: "#/parameters/sha1"
         - $ref: "#/parameters/sha256"
         - $ref: "#/parameters/time"
+        - $ref: "#/parameters/crl"
       responses:
         200:
           description: Successful response
           schema:
-            $ref: "#/definitions/Validate"
+            type: object
+            properties:
+              policy:
+                $ref: "#/definitions/Policy"
+              policyversion:
+                $ref: "#/definitions/PolicyVersion"
+              policyoid:
+                $ref: "#/definitions/PolicyOID"
+              cn:
+                $ref: "#/definitions/CN"
+              certdetails:
+                $ref: "#/definitions/CertDetails"
+              status:
+                $ref: "#/definitions/Status"
+              error:
+                $ref: "#/definitions/Message"
         500:
           description: Error ocurred
           schema:
@@ -168,7 +246,7 @@ parameters:
     description: Data e hora da assinatura digital
     required: true
     type: string
-    format: datetime
+    format: date-time
   policy:
     name: policy
     in: formData
@@ -198,46 +276,60 @@ parameters:
             
 definitions:
 
-  Test:
-    type: object
-    properties:
-      provider:
-        type: string
-      version:
-        type: string
-      status:
-        type: string
-    example:
-      provider: Blue Crystal REST
-      version: version
-      status: OK
-
-  Certificate:
-    type: object
-    properties:
-      cn:
-        type: string
-        description: Common Name
-      name:
-        type: string
-        description: Nome
-      subject:
-        type: string
-        description: Subject
-      cpf:
-        type: string
-        description: CPF
-      certdetails:
-        $ref: "#/definitions/CertDetails"
-    example:
-      cn: RENATO DO AMARAL CRIVANO MACHADO:RJ13635
-      name: RENATO DO AMARAL CRIVANO MACHADO
-      subject: CN=RENATO DO AMARAL CRIVANO MACHADO:RJ13635, OU=SERVIDOR, OU=SECAO JUDICIARIA RIO DE JANEIRO-SJRJ, OU=Autoridade Certificadora da Justica - ACJUS v4, OU=Cert-JUS Institucional - A3, O=ICP-Brasil, C=BR
-      cpf: 00489623760
-
   CertDetails:
     type: object
     description: Demais propriedades do certificado
+    properties:
+      aki0:
+        type: string
+      basicConstraint0:
+        type: string
+      birth_date0: 
+        type: string
+      certPolOid0: 
+        type: string
+      certPolQualifier0: 
+        type: string
+      certSha2560: 
+        type: string
+      cert_type0: 
+        type: string
+      cert_usage0: 
+        type: string
+      chain0: 
+        type: string
+      cpf0: 
+        type: string
+      crlDP0: 
+        type: string
+      eku0:
+        type: string
+      eleitor0: 
+        type: string
+      issuer0: 
+        type: string
+      key_length0: 
+        type: string
+      ku0: 
+        type: string
+      notAfter0: 
+        type: string
+      notBefore0: 
+        type: string
+      rg0: 
+        type: string
+      rg_org0: 
+        type: string
+      rg_uf0: 
+        type: string
+      san_email0: 
+        type: string
+      serial0: 
+        type: string
+      subject0: 
+        type: string
+      version0: 
+        type: string
     example:
       aki0: D4B1C3294997AD4E6636DBE94E004A6AD8C3DAC4
       basicConstraint0: -1
@@ -297,57 +389,20 @@ definitions:
     format: byte
     example: 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
     
-  Hash:
-    type: object
-    properties:
-      hash:
-        $ref: "#/definitions/HashB64"
-      policy:
-        $ref: "#/definitions/Policy"
-      policyversion:
-        $ref: "#/definitions/PolicyVersion"
-      policyoid:
-        $ref: "#/definitions/PolicyOID"
-      cn:
-        $ref: "#/definitions/CN"
-      certdetails:
-        $ref: "#/definitions/CertDetails"
-
-  Envelope:
-    type: object
-    properties:
-      envelope:
-        $ref: "#/definitions/EnvelopeB64"
-      policy:
-        $ref: "#/definitions/Policy"
-      policyversion:
-        $ref: "#/definitions/PolicyVersion"
-      policyoid:
-        $ref: "#/definitions/PolicyOID"
-      cn:
-        $ref: "#/definitions/CN"
-      certdetails:
-        $ref: "#/definitions/CertDetails"
-
-  EnvelopeOnly:
-    type: object
-    properties:
-      envelope:
-        $ref: "#/definitions/EnvelopeB64"
-
-  Validate:
-    type: object
-    properties:
-      policy:
-        $ref: "#/definitions/Policy"
-      policyversion:
-        $ref: "#/definitions/PolicyVersion"
-      policyoid:
-        $ref: "#/definitions/PolicyOID"
-      cn:
-        $ref: "#/definitions/CN"
-      certdetails:
-        $ref: "#/definitions/CertDetails"
+  Status:
+    description: Resultado de uma validação de assinatura. GOOD e UNKNOWN são consideradas assinaturas válidas.
+    type: string
+    example: GOOD
+    
+  Message:
+    description: Mensagem de erro relativa a validação da assinatura
+    type: string
+    example: Não foi possíel validar a assinatura com política
+    
+  Sha256Hex:
+    description: Representação do Sha250 do documento em hexadecimal.
+    type: string
+    example: 32E3564FCDB6F956985BEE6DD4999CD8BF4F516D8B11E55B3379EBE8DBF22A7F
 
   Error:
     type: object
