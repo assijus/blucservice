@@ -1,9 +1,9 @@
 package com.crivano.bluc.rest.server;
 
-import com.crivano.bluc.rest.server.IBlueCrystal.CertDetails;
-import com.crivano.bluc.rest.server.IBlueCrystal.IValidatePost;
-import com.crivano.bluc.rest.server.IBlueCrystal.ValidatePostRequest;
-import com.crivano.bluc.rest.server.IBlueCrystal.ValidatePostResponse;
+import com.crivano.blucservice.api.IBlueCrystal.CertDetails;
+import com.crivano.blucservice.api.IBlueCrystal.IValidatePost;
+import com.crivano.blucservice.api.IBlueCrystal.ValidatePostRequest;
+import com.crivano.blucservice.api.IBlueCrystal.ValidatePostResponse;
 import com.crivano.swaggerservlet.ISwaggerCacheableMethod;
 
 public class ValidatePost implements IValidatePost, ISwaggerCacheableMethod {

@@ -10,9 +10,9 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.crivano</groupId>
-			<artifactId>swaggerservlet</artifactId>
-			<version>0.0.2-SNAPSHOT</version>
+			<groupId>com.crivano.blucservice</groupId>
+			<artifactId>blucservice-api</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>

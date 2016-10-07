@@ -1,14 +1,9 @@
 package com.crivano.bluc.rest.server;
 
-import java.util.Date;
-
-import org.bouncycastle.util.encoders.Base64;
-import org.json.JSONObject;
-
-import com.crivano.bluc.rest.server.IBlueCrystal.CertDetails;
-import com.crivano.bluc.rest.server.IBlueCrystal.EnvelopePostRequest;
-import com.crivano.bluc.rest.server.IBlueCrystal.EnvelopePostResponse;
-import com.crivano.bluc.rest.server.IBlueCrystal.IEnvelopePost;
+import com.crivano.blucservice.api.IBlueCrystal.CertDetails;
+import com.crivano.blucservice.api.IBlueCrystal.EnvelopePostRequest;
+import com.crivano.blucservice.api.IBlueCrystal.EnvelopePostResponse;
+import com.crivano.blucservice.api.IBlueCrystal.IEnvelopePost;
 import com.crivano.swaggerservlet.SwaggerUtils;
 
 public class EnvelopePost implements IEnvelopePost {

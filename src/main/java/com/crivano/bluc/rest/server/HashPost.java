@@ -1,14 +1,9 @@
 package com.crivano.bluc.rest.server;
 
-import java.util.Date;
-
-import org.bouncycastle.util.encoders.Base64;
-import org.json.JSONObject;
-
-import com.crivano.bluc.rest.server.IBlueCrystal.CertDetails;
-import com.crivano.bluc.rest.server.IBlueCrystal.HashPostRequest;
-import com.crivano.bluc.rest.server.IBlueCrystal.HashPostResponse;
-import com.crivano.bluc.rest.server.IBlueCrystal.IHashPost;
+import com.crivano.blucservice.api.IBlueCrystal.CertDetails;
+import com.crivano.blucservice.api.IBlueCrystal.HashPostRequest;
+import com.crivano.blucservice.api.IBlueCrystal.HashPostResponse;
+import com.crivano.blucservice.api.IBlueCrystal.IHashPost;
 import com.crivano.swaggerservlet.SwaggerUtils;
 
 public class HashPost implements IHashPost {

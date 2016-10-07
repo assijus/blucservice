@@ -1,21 +1,21 @@
 package com.crivano.bluc.rest.server;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import com.crivano.bluc.rest.server.IBlueCrystal.AttachPostRequest;
-import com.crivano.bluc.rest.server.IBlueCrystal.AttachPostResponse;
-import com.crivano.bluc.rest.server.IBlueCrystal.CertDetails;
-import com.crivano.bluc.rest.server.IBlueCrystal.CertificatePostRequest;
-import com.crivano.bluc.rest.server.IBlueCrystal.CertificatePostResponse;
-import com.crivano.bluc.rest.server.IBlueCrystal.EnvelopePostRequest;
-import com.crivano.bluc.rest.server.IBlueCrystal.EnvelopePostResponse;
-import com.crivano.bluc.rest.server.IBlueCrystal.HashPostRequest;
-import com.crivano.bluc.rest.server.IBlueCrystal.HashPostResponse;
-import com.crivano.bluc.rest.server.IBlueCrystal.TestGetRequest;
-import com.crivano.bluc.rest.server.IBlueCrystal.TestGetResponse;
-import com.crivano.bluc.rest.server.IBlueCrystal.ValidatePostRequest;
-import com.crivano.bluc.rest.server.IBlueCrystal.ValidatePostResponse;
+import com.crivano.blucservice.api.IBlueCrystal;
+import com.crivano.blucservice.api.IBlueCrystal.AttachPostRequest;
+import com.crivano.blucservice.api.IBlueCrystal.AttachPostResponse;
+import com.crivano.blucservice.api.IBlueCrystal.CertDetails;
+import com.crivano.blucservice.api.IBlueCrystal.CertificatePostRequest;
+import com.crivano.blucservice.api.IBlueCrystal.CertificatePostResponse;
+import com.crivano.blucservice.api.IBlueCrystal.EnvelopePostRequest;
+import com.crivano.blucservice.api.IBlueCrystal.EnvelopePostResponse;
+import com.crivano.blucservice.api.IBlueCrystal.HashPostRequest;
+import com.crivano.blucservice.api.IBlueCrystal.HashPostResponse;
+import com.crivano.blucservice.api.IBlueCrystal.TestGetRequest;
+import com.crivano.blucservice.api.IBlueCrystal.TestGetResponse;
+import com.crivano.blucservice.api.IBlueCrystal.ValidatePostRequest;
+import com.crivano.blucservice.api.IBlueCrystal.ValidatePostResponse;
 import com.crivano.swaggerservlet.SwaggerTestSupport;
 import com.crivano.swaggerservlet.SwaggerUtils;
 
@@ -33,6 +33,11 @@ public class BluCServiceTest extends SwaggerTestSupport {
 	@Override
 	protected String getPackage() {
 		return "com.crivano.bluc.rest.server";
+	}
+
+	@Override
+	protected Class getAPI() {
+		return IBlueCrystal.class;
 	}
 
 	public void testTest_Simple_Success() throws JSONException {

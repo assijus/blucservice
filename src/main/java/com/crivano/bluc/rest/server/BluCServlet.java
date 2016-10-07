@@ -7,7 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.crivano.swaggerservlet.Swagger;
+import com.crivano.blucservice.api.IBlueCrystal;
 import com.crivano.swaggerservlet.SwaggerServlet;
 
 public class BluCServlet extends SwaggerServlet {
@@ -17,13 +17,9 @@ public class BluCServlet extends SwaggerServlet {
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 
+		super.setAPI(IBlueCrystal.class);
+
 		super.setActionPackage("com.crivano.bluc.rest.server");
-
-		Swagger sw = new Swagger();
-		sw.loadFromInputStream(this.getClass().getResourceAsStream(
-				"/swagger.yaml"));
-
-		super.setSwagger(sw);
 	}
 
 	@Override

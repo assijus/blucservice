@@ -1,8 +1,9 @@
+
 package com.crivano.bluc.rest.server;
 
-import com.crivano.bluc.rest.server.IBlueCrystal.ITestGet;
-import com.crivano.bluc.rest.server.IBlueCrystal.TestGetRequest;
-import com.crivano.bluc.rest.server.IBlueCrystal.TestGetResponse;
+import com.crivano.blucservice.api.IBlueCrystal.ITestGet;
+import com.crivano.blucservice.api.IBlueCrystal.TestGetRequest;
+import com.crivano.blucservice.api.IBlueCrystal.TestGetResponse;
 import com.crivano.swaggerservlet.ISwaggerCacheableMethod;
 
 public class TestGet implements ITestGet, ISwaggerCacheableMethod {

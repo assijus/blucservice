@@ -2,10 +2,10 @@ package com.crivano.bluc.rest.server;
 
 import java.util.Map;
 
-import com.crivano.bluc.rest.server.IBlueCrystal.CertDetails;
-import com.crivano.bluc.rest.server.IBlueCrystal.CertificatePostRequest;
-import com.crivano.bluc.rest.server.IBlueCrystal.CertificatePostResponse;
-import com.crivano.bluc.rest.server.IBlueCrystal.ICertificatePost;
+import com.crivano.blucservice.api.IBlueCrystal.CertDetails;
+import com.crivano.blucservice.api.IBlueCrystal.CertificatePostRequest;
+import com.crivano.blucservice.api.IBlueCrystal.CertificatePostResponse;
+import com.crivano.blucservice.api.IBlueCrystal.ICertificatePost;
 import com.crivano.swaggerservlet.ISwaggerCacheableMethod;
 import com.crivano.swaggerservlet.Swagger;
 

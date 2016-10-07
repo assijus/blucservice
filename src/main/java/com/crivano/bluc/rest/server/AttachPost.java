@@ -1,11 +1,8 @@
 package com.crivano.bluc.rest.server;
 
-import org.bouncycastle.util.encoders.Base64;
-import org.json.JSONObject;
-
-import com.crivano.bluc.rest.server.IBlueCrystal.AttachPostRequest;
-import com.crivano.bluc.rest.server.IBlueCrystal.AttachPostResponse;
-import com.crivano.bluc.rest.server.IBlueCrystal.IAttachPost;
+import com.crivano.blucservice.api.IBlueCrystal.AttachPostRequest;
+import com.crivano.blucservice.api.IBlueCrystal.AttachPostResponse;
+import com.crivano.blucservice.api.IBlueCrystal.IAttachPost;
 
 public class AttachPost implements IAttachPost {
 
