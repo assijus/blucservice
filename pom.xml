@@ -18,7 +18,7 @@
 		<dependency>
 			<groupId>al.bluecryst</groupId>
 			<artifactId>bluecrystal.deps.service</artifactId>
-			<version>1.5.5</version>
+			<version>1.8.3</version>
 		</dependency>
 
 		<dependency>

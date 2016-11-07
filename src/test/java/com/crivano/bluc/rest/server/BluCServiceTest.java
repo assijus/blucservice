@@ -2,20 +2,17 @@ package com.crivano.bluc.rest.server;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Collection;
 
 import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
-import org.bouncycastle.cms.CMSException;
 import org.bouncycastle.cms.CMSProcessable;
 import org.bouncycastle.cms.CMSProcessableByteArray;
 import org.bouncycastle.cms.CMSSignedData;
 import org.bouncycastle.cms.SignerInformation;
 import org.bouncycastle.cms.SignerInformationStore;
 import org.bouncycastle.cms.jcajce.JcaSimpleSignerInfoVerifierBuilder;
-import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.util.Store;
 import org.bouncycastle.util.encoders.Base64;
 import org.json.JSONException;
@@ -30,8 +27,6 @@ import com.crivano.blucservice.api.IBlueCrystal.EnvelopePostRequest;
 import com.crivano.blucservice.api.IBlueCrystal.EnvelopePostResponse;
 import com.crivano.blucservice.api.IBlueCrystal.HashPostRequest;
 import com.crivano.blucservice.api.IBlueCrystal.HashPostResponse;
-import com.crivano.blucservice.api.IBlueCrystal.TestGetRequest;
-import com.crivano.blucservice.api.IBlueCrystal.TestGetResponse;
 import com.crivano.blucservice.api.IBlueCrystal.ValidatePostRequest;
 import com.crivano.blucservice.api.IBlueCrystal.ValidatePostResponse;
 import com.crivano.swaggerservlet.SwaggerTestSupport;
@@ -61,15 +56,6 @@ public class BluCServiceTest extends SwaggerTestSupport {
 	@Override
 	protected Class getAPI() {
 		return IBlueCrystal.class;
-	}
-
-	public void testTest_Simple_Success() throws JSONException {
-		TestGetRequest req = new TestGetRequest();
-		TestGetResponse resp = new TestGetResponse();
-		run("GET", "/test", req, resp);
-		assertEquals("OK", resp.status);
-		assertEquals("Blue Crystal REST", resp.provider);
-		assertEquals("1.0", resp.version);
 	}
 
 	public void testCertificate_Simple_Success() throws JSONException {
