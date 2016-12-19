@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.crivano.blucservice.api.IBlueCrystal;
 import com.crivano.swaggerservlet.SwaggerServlet;
-import com.crivano.swaggerservlet.SwaggerUtils;
 import com.crivano.swaggerservlet.dependency.TestableDependency;
 
 public class BluCServlet extends SwaggerServlet {
@@ -25,8 +24,13 @@ public class BluCServlet extends SwaggerServlet {
 
 		super.setActionPackage("com.crivano.bluc.rest.server");
 
-		addDependency(new TestableDependency("network", "internet", false) {
-			String testsite = "http://www.google.com";
+		class HttpGetDependency extends TestableDependency {
+			String testsite;
+
+			HttpGetDependency(String service, String testsite, boolean partial) {
+				super("network", service, partial);
+				this.testsite = testsite;
+			}
 
 			@Override
 			public String getUrl() {
@@ -40,9 +44,14 @@ public class BluCServlet extends SwaggerServlet {
 				conn.connect();
 				return true;
 			}
+		}
 
-		});
+		addDependency(new HttpGetDependency("internet", "http://www.google.com", false));
 
+		addDependency(
+				new HttpGetDependency("icpbrasil", "http://politicas.icpbrasil.gov.br/PA_AD_RB_v2_1.der", false));
+
+		addDependency(new HttpGetDependency("accaixajus", "http://lcr.caixa.gov.br/accaixajusv2.crl", false));
 	}
 
 	@Override
