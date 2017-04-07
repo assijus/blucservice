@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.security.cert.X509Certificate;
 import java.util.Collection;
+import java.util.Date;
 
 import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
@@ -143,6 +144,7 @@ public class BluCServiceTest extends SwaggerTestSupport {
 
 		req.envelope = SwaggerUtils.base64Decode(attachPKCS7detached);
 		req.content = SwaggerUtils.base64Decode(attachPKCS7content);
+		req.time = new Date(115, 1, 1);
 		run("POST", "/attach", req, resp);
 
 		assertEquals(attachPKCS7attached, SwaggerUtils.base64Encode(resp.envelope));

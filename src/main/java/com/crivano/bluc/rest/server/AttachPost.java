@@ -12,14 +12,12 @@ public class AttachPost implements IAttachPost {
 	}
 
 	@Override
-	public void run(AttachPostRequest req, AttachPostResponse resp)
-			throws Exception {
-		byte[] attached = Utils.getBlucutil().attachContentsToPKCS7(
-				req.content, req.envelope);
+	public void run(AttachPostRequest req, AttachPostResponse resp) throws Exception {
+		byte[] attached = Utils.getBlucutil().attachContentsToPKCS7(req.content, req.envelope, req.time,
+				req.crl != null ? req.crl : false);
 
 		resp.envelope = attached;
 
-		resp.sha256hex = Utils.bytesToHex(Utils.getBlucutil().getCcServ()
-				.calcSha256(attached));
+		resp.sha256hex = Utils.bytesToHex(Utils.getBlucutil().getCcServ().calcSha256(attached));
 	}
 }

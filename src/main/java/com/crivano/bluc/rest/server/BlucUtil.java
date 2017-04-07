@@ -424,7 +424,7 @@ public class BlucUtil {
 		}
 	}
 
-	public byte[] attachContentsToPKCS7(byte[] content, byte[] detached)
+	public byte[] attachContentsToPKCS7(byte[] content, byte[] detached, Date dtSign, boolean verifyCLR)
 			throws Exception {
 		String policy = obtemPolitica(detached);
 		byte[] origHash = null;
@@ -432,8 +432,8 @@ public class BlucUtil {
 		if (policy == null) {
 			byte[] contentSha1 = getCcServ().calcSha1(content);
 
-			int sts = getCcServ().validateSign(detached, contentSha1, null,
-					false);
+			int sts = getCcServ().validateSign(detached, contentSha1, dtSign,
+					verifyCLR);
 			if (StatusConst.GOOD != sts && StatusConst.UNKNOWN != sts)
 				throw new Exception("invalid signature: "
 						+ getMessageByStatus(sts));
@@ -542,7 +542,8 @@ public class BlucUtil {
 						+ content.length, envelope_2.length);
 
 				sts2 = getCcServ()
-						.validateSign(attached, origHash, null, false);
+						.validateSign(attached, origHash, dtSign,
+								verifyCLR);
 				savedException = null;
 				break;
 			} catch (Exception ioe) {
