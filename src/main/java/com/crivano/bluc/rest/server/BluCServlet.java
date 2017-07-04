@@ -27,8 +27,8 @@ public class BluCServlet extends SwaggerServlet {
 		class HttpGetDependency extends TestableDependency {
 			String testsite;
 
-			HttpGetDependency(String service, String testsite, boolean partial) {
-				super("network", service, partial);
+			HttpGetDependency(String service, String testsite, boolean partial, long msMin, long msMax) {
+				super("network", service, partial, msMin, msMax);
 				this.testsite = testsite;
 			}
 
@@ -46,12 +46,12 @@ public class BluCServlet extends SwaggerServlet {
 			}
 		}
 
-		addDependency(new HttpGetDependency("internet", "http://www.google.com", false));
+		addDependency(new HttpGetDependency("internet", "http://www.google.com", false, 0, 10000));
 
-		addDependency(
-				new HttpGetDependency("icpbrasil", "http://politicas.icpbrasil.gov.br/PA_AD_RB_v2_1.der", false));
+		addDependency(new HttpGetDependency("icpbrasil", "http://politicas.icpbrasil.gov.br/PA_AD_RB_v2_1.der", false,
+				0, 10000));
 
-		addDependency(new HttpGetDependency("accaixajus", "http://lcr.caixa.gov.br/accaixajusv2.crl", false));
+		addDependency(new HttpGetDependency("accaixajus", "http://lcr.caixa.gov.br/accaixajusv2.crl", false, 0, 10000));
 	}
 
 	@Override
