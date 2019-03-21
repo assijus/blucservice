@@ -28,7 +28,7 @@ public class ValidatePost implements IValidatePost, ISwaggerCacheableMethod {
 		resp.policy = validateresp.getPolicy();
 		resp.policyversion = validateresp.getPolicyversion();
 		resp.policyoid = validateresp.getPolicyoid();
-		resp.error = validateresp.getError();
+		resp.errormsg = validateresp.getError();
 		resp.status = validateresp.getStatus();
 		resp.certdetails = new CertDetails();
 		CertificatePost.fillCertificateDetails(resp.certdetails,

@@ -135,7 +135,7 @@ public class BluCServiceTest extends SwaggerTestSupport {
 		assertEquals("2.16.76.1.7.1.1.2.1", resp.policyoid);
 		assertEquals("2.1", resp.policyversion);
 		assertTrue(resp.certdetails instanceof CertDetails);
-		assertTrue(resp.error == null);
+		assertTrue(resp.errormsg == null);
 	}
 
 	public void testAttach_PKCS7_Success() throws JSONException {

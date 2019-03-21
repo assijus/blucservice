@@ -17,12 +17,10 @@ public class BluCServlet extends SwaggerServlet {
 	private static final long serialVersionUID = 1756711359239182178L;
 
 	@Override
-	public void init(ServletConfig config) throws ServletException {
-		super.init(config);
-
-		super.setAPI(IBlueCrystal.class);
-
-		super.setActionPackage("com.crivano.bluc.rest.server");
+	public void initialize(ServletConfig config) throws ServletException {
+		setAPI(IBlueCrystal.class);
+		setActionPackage("com.crivano.bluc.rest.server");
+		addPublicProperty("threadpool.size", "20");
 
 		class HttpGetDependency extends TestableDependency {
 			String testsite;

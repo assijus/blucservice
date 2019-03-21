@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Logger;
 
-import com.crivano.swaggerservlet.SwaggerUtils;
+import com.crivano.swaggerservlet.SwaggerServlet;
 
 import bluecrystal.service.loader.HttpLoader;
 
@@ -24,7 +24,7 @@ public class ExecutorHTTPLoaderImpl implements HttpLoader {
 	private static final int TIMEOUT_SECONDS = 15;
 
 	private static ExecutorService executor = Executors
-			.newFixedThreadPool(new Integer(SwaggerUtils.getProperty("blucservice.threadpool.size", "20")));
+			.newFixedThreadPool(new Integer(SwaggerServlet.getProperty("blucservice.threadpool.size")));
 
 	static {
 		LOG.info("Carregando implementação própria de: " + ExecutorHTTPLoaderImpl.class.getName());
