@@ -6,6 +6,9 @@ import java.security.cert.X509Certificate;
 import java.util.Collection;
 import java.util.Date;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+
 import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.cms.CMSProcessable;
@@ -30,6 +33,7 @@ import com.crivano.blucservice.api.IBlueCrystal.HashPostRequest;
 import com.crivano.blucservice.api.IBlueCrystal.HashPostResponse;
 import com.crivano.blucservice.api.IBlueCrystal.ValidatePostRequest;
 import com.crivano.blucservice.api.IBlueCrystal.ValidatePostResponse;
+import com.crivano.swaggerservlet.SwaggerServlet;
 import com.crivano.swaggerservlet.SwaggerTestSupport;
 import com.crivano.swaggerservlet.SwaggerUtils;
 
@@ -121,6 +125,8 @@ public class BluCServiceTest extends SwaggerTestSupport {
 	public void testValidate_ADRB21_Success() throws JSONException {
 		ValidatePostRequest req = new ValidatePostRequest();
 		ValidatePostResponse resp = new ValidatePostResponse();
+
+		setProperty("threadpool.size", "20");
 
 		req.envelope = SwaggerUtils.base64Decode(envelopeADRB21);
 		req.sha1 = SwaggerUtils.base64Decode("EMjARlRD0W9/lr/y1sp3nZf/uUxwKil03dUiOhvd2DU=");

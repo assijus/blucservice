@@ -24,7 +24,7 @@ public class ExecutorHTTPLoaderImpl implements HttpLoader {
 	private static final int TIMEOUT_SECONDS = 15;
 
 	private static ExecutorService executor = Executors
-			.newFixedThreadPool(new Integer(SwaggerServlet.getProperty("blucservice.threadpool.size")));
+			.newFixedThreadPool(new Integer(SwaggerServlet.getProperty("threadpool.size")));
 
 	static {
 		LOG.info("Carregando implementação própria de: " + ExecutorHTTPLoaderImpl.class.getName());
