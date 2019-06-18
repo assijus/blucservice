@@ -5,6 +5,7 @@ import com.crivano.blucservice.api.IBlueCrystal.IValidatePost;
 import com.crivano.blucservice.api.IBlueCrystal.ValidatePostRequest;
 import com.crivano.blucservice.api.IBlueCrystal.ValidatePostResponse;
 import com.crivano.swaggerservlet.ISwaggerCacheableMethod;
+import com.crivano.swaggerservlet.SwaggerException;
 
 public class ValidatePost implements IValidatePost, ISwaggerCacheableMethod {
 
@@ -33,5 +34,7 @@ public class ValidatePost implements IValidatePost, ISwaggerCacheableMethod {
 		resp.certdetails = new CertDetails();
 		CertificatePost.fillCertificateDetails(resp.certdetails,
 				validateresp.getCertdetails());
+		if (resp.errormsg != null)
+			throw new SwaggerException(resp.errormsg, 400, null, req, resp, "validando assinatura");
 	}
 }
