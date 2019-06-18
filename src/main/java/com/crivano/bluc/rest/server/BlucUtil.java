@@ -1,9 +1,12 @@
 package com.crivano.bluc.rest.server;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigInteger;
+import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
@@ -18,8 +21,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import java.security.cert.Certificate;
-
 import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.cms.CMSProcessableByteArray;
@@ -30,12 +31,9 @@ import org.bouncycastle.cms.jcajce.JcaSimpleSignerInfoVerifierBuilder;
 import org.bouncycastle.util.Store;
 import org.bouncycastle.util.encoders.Base64;
 
-import bluecrystal.bcdeps.helper.DerEncoder;
 import bluecrystal.domain.AppSignedInfoEx;
 import bluecrystal.domain.NameValue;
 import bluecrystal.domain.SignCompare;
-import bluecrystal.domain.SignPolicy;
-import bluecrystal.domain.SignPolicyRef;
 import bluecrystal.domain.StatusConst;
 import bluecrystal.service.exception.InvalidSigntureException;
 import bluecrystal.service.service.ADRBService_21;
@@ -43,10 +41,15 @@ import bluecrystal.service.service.CertificateService;
 import bluecrystal.service.service.CmsWithChainService;
 import bluecrystal.service.service.CryptoService;
 import bluecrystal.service.service.CryptoServiceImpl;
-import bluecrystal.service.service.EnvelopeService;
 import bluecrystal.service.service.SignVerifyService;
 import bluecrystal.service.service.Validator;
 import bluecrystal.service.service.ValidatorSrv;
+import sun.security.pkcs.ContentInfo;
+import sun.security.pkcs.PKCS7;
+import sun.security.pkcs.SignerInfo;
+import sun.security.util.DerOutputStream;
+import sun.security.x509.AlgorithmId;
+import sun.security.x509.X500Name;
 
 public class BlucUtil {
 
@@ -101,7 +104,13 @@ public class BlucUtil {
 		resp.setCn(obterNomeExibicao(getCN(certificado)));
 		setDetails(certificado, resp.getCertdetails());
 
-		if (pubKey.getModulus().bitLength() == FALLBACK_LIMIT) {
+		if (!politica) {
+			resp.setEnvelope(composeEnvolopePKCS7(sign, c.getEncoded(),
+					sha256, dtAssinatura));
+			resp.setPolicy("PKCS#7");
+			resp.setPolicyversion("1.0");
+			resp.setPolicyoid("1.2.840.113549.1.7");
+		} else if (pubKey.getModulus().bitLength() == FALLBACK_LIMIT) {
 			resp.setEnvelope(composeEnvelopeADRB21(sign, c.getEncoded(),
 					sha256, dtAssinatura));
 			resp.setPolicy("AD-RB");
@@ -204,6 +213,42 @@ public class BlucUtil {
 		Certificate cert = cf.generateCertificate(bais);
 		return (X509Certificate) cert;
 	}
+	
+	@SuppressWarnings("restriction")
+	private String composeEnvolopePKCS7(byte[] sign, byte[] x509,
+			byte[] origHash, Date signingTime) throws Exception {
+		X509Certificate cert = loadCert(x509);
+		
+		// load X500Name
+		X500Name xName = X500Name.asX500Name(cert
+				.getSubjectX500Principal());
+		// load serial number
+		BigInteger serial = cert.getSerialNumber();
+		// laod digest algorithm
+		AlgorithmId digestAlgorithmId = new AlgorithmId(AlgorithmId.SHA_oid);
+		// load signing algorithm
+		AlgorithmId signAlgorithmId = new AlgorithmId(
+				AlgorithmId.RSAEncryption_oid);
+
+		// Create SignerInfo:
+		SignerInfo sInfo = new SignerInfo(xName, serial, digestAlgorithmId,
+				signAlgorithmId, sign);
+		// Create ContentInfo:
+		// ContentInfo cInfo = new ContentInfo(ContentInfo.DIGESTED_DATA_OID,
+		// new DerValue(DerValue.tag_OctetString, dataToSign));
+		ContentInfo cInfo = new ContentInfo(ContentInfo.DIGESTED_DATA_OID, null);
+		// Create PKCS7 Signed data
+		PKCS7 p7 = new PKCS7(new AlgorithmId[] { digestAlgorithmId }, cInfo,
+				new X509Certificate[] { cert },
+				new SignerInfo[] { sInfo });
+		// Write PKCS7 to bYteArray
+		ByteArrayOutputStream bOut = new DerOutputStream();
+		p7.encodeSignedData(bOut);
+		byte[] encodedPKCS7 = bOut.toByteArray();
+
+		return new String(Base64.encode(encodedPKCS7));
+	}
+
 
 	private String composeEnvelopeADRB10(byte[] sign, byte[] x509,
 			byte[] origHash, Date signingTime) throws Exception {
