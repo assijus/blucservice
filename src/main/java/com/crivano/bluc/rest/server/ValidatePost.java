@@ -19,7 +19,7 @@ public class ValidatePost implements IValidatePost, ISwaggerCacheableMethod {
 			throws Exception {
 		// Date dtSign = javax.xml.bind.DatatypeConverter.parseDateTime(time)
 		// .getTime();
-
+		
 		// Produce response
 		ValidateResponse validateresp = new ValidateResponse();
 		Utils.getBlucutil().validateSign(req.envelope, req.sha1, req.sha256,
