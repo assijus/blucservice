@@ -6,6 +6,8 @@ import com.crivano.blucservice.api.IBlueCrystal.HashPostResponse;
 import com.crivano.blucservice.api.IBlueCrystal.IHashPost;
 import com.crivano.swaggerservlet.SwaggerUtils;
 
+import bluecrystal.service.api.HashResponse;
+
 public class HashPost implements IHashPost {
 
 	@Override
@@ -14,17 +16,15 @@ public class HashPost implements IHashPost {
 	}
 
 	@Override
-	public void run(HashPostRequest req, HashPostResponse resp)
-			throws Exception {
+	public void run(HashPostRequest req, HashPostResponse resp) throws Exception {
 
 		// Produce response
 		HashResponse hashresp = new HashResponse();
 		if (!("AD-RB".equals(req.policy) || "PKCS#7".equals(req.policy)))
-			throw new Exception(
-					"Parameter 'policy' should be either 'AD-RB' or 'PKCS#7'");
+			throw new Exception("Parameter 'policy' should be either 'AD-RB' or 'PKCS#7'");
 
-		Utils.getBlucutil().produzPacoteAssinavel(req.certificate, req.sha1,
-				req.sha256, "AD-RB".equals(req.policy), req.time, hashresp);
+		Utils.getBlucutil().signedAttributes(req.certificate, req.sha1, req.sha256, "AD-RB".equals(req.policy),
+				req.time, hashresp);
 
 		resp.hash = SwaggerUtils.base64Decode(hashresp.getHash());
 		resp.cn = hashresp.getCn();
@@ -33,7 +33,6 @@ public class HashPost implements IHashPost {
 		resp.policyoid = hashresp.getPolicyoid();
 		// resp.error = hashresp.getError();
 		resp.certdetails = new CertDetails();
-		CertificatePost.fillCertificateDetails(resp.certdetails,
-				hashresp.getCertdetails());
+		CertificatePost.fillCertificateDetails(resp.certdetails, hashresp.getCertdetails());
 	}
 }

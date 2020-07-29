@@ -5,7 +5,7 @@
 	<groupId>blucservice</groupId>
 	<artifactId>blucservice</artifactId>
 	<packaging>war</packaging>
-	<version>1.2.0</version>
+	<version>2.3.0</version>
 	<name>blucservice Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 
@@ -18,8 +18,8 @@
 
 		<dependency>
 			<groupId>al.bluecryst</groupId>
-			<artifactId>bluecrystal.deps.service</artifactId>
-			<version>1.13.0</version>
+			<artifactId>bluecrystal</artifactId>
+			<version>2.3.1</version>
 		</dependency>
 
 		<dependency>

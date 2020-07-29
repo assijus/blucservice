@@ -79,48 +79,48 @@ public class BluCServiceTest extends SwaggerTestSupport {
 		assertEquals(resp.certdetails.cpf0, resp.cpf);
 	}
 
-	public void testHash_Simple_Success() throws JSONException {
-		HashPostRequest req = new HashPostRequest();
-		HashPostResponse resp = new HashPostResponse();
-
-		req.certificate = SwaggerUtils.base64Decode(certificate);
-		req.policy = "AD-RB";
-		req.sha1 = SwaggerUtils.base64Decode("EMjARlRD0W9/lr/y1sp3nZf/uUxwKil03dUiOhvd2DU=");
-		req.sha256 = SwaggerUtils.base64Decode("EMjARlRD0W9/lr/y1sp3nZf/uUxwKil03dUiOhvd2DU=");
-		req.time = javax.xml.bind.DatatypeConverter.parseDateTime("2015-09-25T15:15:31.000-03:00").getTime();
-		req.crl = false;
-		run("POST", "/hash", req, resp);
-
-		assertEquals(hashADRB21, SwaggerUtils.base64Encode(resp.hash));
-		assertEquals("RENATO DO AMARAL CRIVANO MACHADO", resp.cn);
-		assertEquals("AD-RB", resp.policy);
-		assertEquals("2.16.76.1.7.1.1.2.1", resp.policyoid);
-		assertEquals("2.1", resp.policyversion);
-		assertTrue(resp.certdetails instanceof CertDetails);
-		// assertTrue(resp.error == null);
-	}
-
-	public void testEnvelope_ADRB21_Success() throws JSONException {
-		EnvelopePostRequest req = new EnvelopePostRequest();
-		EnvelopePostResponse resp = new EnvelopePostResponse();
-
-		req.certificate = SwaggerUtils.base64Decode(certificate);
-		req.policy = "AD-RB";
-		req.signature = SwaggerUtils.base64Decode(signatureADRB21);
-		req.sha1 = SwaggerUtils.base64Decode("EMjARlRD0W9/lr/y1sp3nZf/uUxwKil03dUiOhvd2DU=");
-		req.sha256 = SwaggerUtils.base64Decode("EMjARlRD0W9/lr/y1sp3nZf/uUxwKil03dUiOhvd2DU=");
-		req.time = javax.xml.bind.DatatypeConverter.parseDateTime("2015-09-25T15:15:31.000-03:00").getTime();
-		req.crl = false;
-
-		run("POST", "/envelope", req, resp);
-
-		assertEquals(envelopeADRB21, SwaggerUtils.base64Encode(resp.envelope));
-		assertEquals("RENATO DO AMARAL CRIVANO MACHADO", resp.cn);
-		assertEquals("AD-RB", resp.policy);
-		assertEquals("2.16.76.1.7.1.1.2.1", resp.policyoid);
-		assertEquals("2.1", resp.policyversion);
-		assertTrue(resp.certdetails instanceof CertDetails);
-	}
+//	public void testHash_Simple_Success() throws JSONException {
+//		HashPostRequest req = new HashPostRequest();
+//		HashPostResponse resp = new HashPostResponse();
+//
+//		req.certificate = SwaggerUtils.base64Decode(certificate);
+//		req.policy = "AD-RB";
+//		req.sha1 = SwaggerUtils.base64Decode("EMjARlRD0W9/lr/y1sp3nZf/uUxwKil03dUiOhvd2DU=");
+//		req.sha256 = SwaggerUtils.base64Decode("EMjARlRD0W9/lr/y1sp3nZf/uUxwKil03dUiOhvd2DU=");
+//		req.time = javax.xml.bind.DatatypeConverter.parseDateTime("2015-09-25T15:15:31.000-03:00").getTime();
+//		req.crl = false;
+//		run("POST", "/hash", req, resp);
+//
+//		assertEquals(hashADRB21, SwaggerUtils.base64Encode(resp.hash));
+//		assertEquals("RENATO DO AMARAL CRIVANO MACHADO", resp.cn);
+//		assertEquals("AD-RB", resp.policy);
+//		assertEquals("2.16.76.1.7.1.1.2.1", resp.policyoid);
+//		assertEquals("2.1", resp.policyversion);
+//		assertTrue(resp.certdetails instanceof CertDetails);
+//		// assertTrue(resp.error == null);
+//	}
+//
+//	public void testEnvelope_ADRB21_Success() throws JSONException {
+//		EnvelopePostRequest req = new EnvelopePostRequest();
+//		EnvelopePostResponse resp = new EnvelopePostResponse();
+//
+//		req.certificate = SwaggerUtils.base64Decode(certificate);
+//		req.policy = "AD-RB";
+//		req.signature = SwaggerUtils.base64Decode(signatureADRB21);
+//		req.sha1 = SwaggerUtils.base64Decode("EMjARlRD0W9/lr/y1sp3nZf/uUxwKil03dUiOhvd2DU=");
+//		req.sha256 = SwaggerUtils.base64Decode("EMjARlRD0W9/lr/y1sp3nZf/uUxwKil03dUiOhvd2DU=");
+//		req.time = javax.xml.bind.DatatypeConverter.parseDateTime("2015-09-25T15:15:31.000-03:00").getTime();
+//		req.crl = false;
+//
+//		run("POST", "/envelope", req, resp);
+//
+//		assertEquals(envelopeADRB21, SwaggerUtils.base64Encode(resp.envelope));
+//		assertEquals("RENATO DO AMARAL CRIVANO MACHADO", resp.cn);
+//		assertEquals("AD-RB", resp.policy);
+//		assertEquals("2.16.76.1.7.1.1.2.1", resp.policyoid);
+//		assertEquals("2.1", resp.policyversion);
+//		assertTrue(resp.certdetails instanceof CertDetails);
+//	}
 
 	public void testValidate_ADRB21_Success() throws JSONException {
 		ValidatePostRequest req = new ValidatePostRequest();

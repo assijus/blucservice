@@ -6,6 +6,8 @@ import com.crivano.blucservice.api.IBlueCrystal.EnvelopePostResponse;
 import com.crivano.blucservice.api.IBlueCrystal.IEnvelopePost;
 import com.crivano.swaggerservlet.SwaggerUtils;
 
+import bluecrystal.service.api.EnvelopeResponse;
+
 public class EnvelopePost implements IEnvelopePost {
 
 	@Override
@@ -14,18 +16,15 @@ public class EnvelopePost implements IEnvelopePost {
 	}
 
 	@Override
-	public void run(EnvelopePostRequest req, EnvelopePostResponse resp)
-			throws Exception {
+	public void run(EnvelopePostRequest req, EnvelopePostResponse resp) throws Exception {
 
 		// Produce response
 		EnvelopeResponse enveloperesp = new EnvelopeResponse();
 		if (!("AD-RB".equals(req.policy) || "PKCS#7".equals(req.policy)))
-			throw new Exception(
-					"Parameter 'policy' should be either 'AD-RB' or 'PKCS#7'");
+			throw new Exception("Parameter 'policy' should be either 'AD-RB' or 'PKCS#7'");
 
-		Utils.getBlucutil().validarECompletarPacoteAssinavel(req.certificate,
-				req.sha1, req.sha256, req.signature,
-				"AD-RB".equals(req.policy), req.time, enveloperesp);
+		Utils.getBlucutil().envelope(req.certificate, req.sha1, req.sha256, req.signature, "AD-RB".equals(req.policy),
+				req.time, enveloperesp);
 
 		resp.envelope = SwaggerUtils.base64Decode(enveloperesp.getEnvelope());
 		resp.cn = enveloperesp.getCn();
@@ -34,7 +33,6 @@ public class EnvelopePost implements IEnvelopePost {
 		resp.policyoid = enveloperesp.getPolicyoid();
 		// resp.error = enveloperesp.getError();
 		resp.certdetails = new CertDetails();
-		CertificatePost.fillCertificateDetails(resp.certdetails,
-				enveloperesp.getCertdetails());
+		CertificatePost.fillCertificateDetails(resp.certdetails, enveloperesp.getCertdetails());
 	}
 }

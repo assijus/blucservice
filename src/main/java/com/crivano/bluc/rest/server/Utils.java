@@ -1,9 +1,9 @@
 package com.crivano.bluc.rest.server;
 
-import java.util.logging.Logger;
+import bluecrystal.service.api.BlucApi;
 
 public class Utils {
-	private static BlucUtil blucutil = new BlucUtil();
+	private static BlucApi blucutil = new BlucApi();
 
 	final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();
 
@@ -17,11 +17,11 @@ public class Utils {
 		return new String(hexChars);
 	}
 
-	public static BlucUtil getBlucutil() {
+	public static BlucApi getBlucutil() {
 		return blucutil;
 	}
 
-	public static void setBlucutil(BlucUtil blucutil) {
+	public static void setBlucutil(BlucApi blucutil) {
 		Utils.blucutil = blucutil;
 	}
 }

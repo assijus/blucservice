@@ -9,8 +9,9 @@ import com.crivano.blucservice.api.IBlueCrystal.ICertificatePost;
 import com.crivano.swaggerservlet.ISwaggerCacheableMethod;
 import com.crivano.swaggerservlet.Swagger;
 
-public class CertificatePost implements ICertificatePost,
-		ISwaggerCacheableMethod {
+import bluecrystal.service.api.CertificateResponse;
+
+public class CertificatePost implements ICertificatePost, ISwaggerCacheableMethod {
 
 	@Override
 	public String getContext() {
@@ -18,10 +19,9 @@ public class CertificatePost implements ICertificatePost,
 	}
 
 	@Override
-	public void run(CertificatePostRequest req, CertificatePostResponse resp)
-			throws Exception {
+	public void run(CertificatePostRequest req, CertificatePostResponse resp) throws Exception {
 		CertificateResponse certificateresp = new CertificateResponse();
-		Utils.getBlucutil().certificado(req.certificate, certificateresp);
+		Utils.getBlucutil().certificate(req.certificate, certificateresp);
 
 		resp.subject = certificateresp.getSubject();
 		resp.cn = certificateresp.getCn();
@@ -29,12 +29,10 @@ public class CertificatePost implements ICertificatePost,
 		resp.cpf = certificateresp.getCpf();
 
 		resp.certdetails = new CertDetails();
-		fillCertificateDetails(resp.certdetails,
-				certificateresp.getCertdetails());
+		fillCertificateDetails(resp.certdetails, certificateresp.getCertdetails());
 	}
 
-	public static void fillCertificateDetails(CertDetails certdetails,
-			Map<String, String> map) throws Exception {
+	public static void fillCertificateDetails(CertDetails certdetails, Map<String, String> map) throws Exception {
 		for (String key : map.keySet()) {
 			Swagger.set(certdetails, key, map.get(key));
 		}
