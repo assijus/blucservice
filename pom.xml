@@ -5,7 +5,7 @@
 	<groupId>blucservice</groupId>
 	<artifactId>blucservice</artifactId>
 	<packaging>war</packaging>
-	<version>2.3.0</version>
+	<version>2.3.2</version>
 	<name>blucservice Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 
@@ -38,5 +38,19 @@
 
 	<build>
 		<finalName>blucservice</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifestEntries>
+							<Build-Time>${maven.build.timestamp}</Build-Time>
+							<Build-Label>${project.version}</Build-Label>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 </project>

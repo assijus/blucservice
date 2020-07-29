@@ -48,7 +48,7 @@ public class BluCServlet extends SwaggerServlet {
 		addDependency(new SwaggerHttpGetDependency("network", "internet", "http://www.google.com", false, 0, 10000));
 
 		addDependency(new SwaggerHttpGetDependency("network", "icpbrasil",
-				"http://politicas.icpbrasil.gov.br/PA_AD_RB_v2_1.der", false, 0, 10000));
+				"http://politicas.icpbrasil.gov.br/PA_AD_RB_v2_3.der", false, 0, 10000));
 
 		addDependency(new SwaggerHttpGetDependency("network", "accaixajus", "http://lcr.caixa.gov.br/accaixajusv2.crl",
 				false, 0, 10000));
