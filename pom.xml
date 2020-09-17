@@ -5,15 +5,27 @@
 	<groupId>blucservice</groupId>
 	<artifactId>blucservice</artifactId>
 	<packaging>war</packaging>
-	<version>2.3.2</version>
+	<version>2.3.3</version>
 	<name>blucservice Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 
 	<dependencies>
 		<dependency>
+			<groupId>com.crivano</groupId>
+			<artifactId>swaggerservlet</artifactId>
+			<version>1.37.0</version>
+		</dependency>
+
+		<dependency>
 			<groupId>com.crivano.blucservice</groupId>
 			<artifactId>blucservice-api</artifactId>
 			<version>1.1.1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.crivano</groupId>
+					<artifactId>swaggerservlet</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
