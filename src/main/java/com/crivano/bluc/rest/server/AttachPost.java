@@ -1,7 +1,6 @@
 package com.crivano.bluc.rest.server;
 
-import com.crivano.blucservice.api.IBlueCrystal.AttachPostRequest;
-import com.crivano.blucservice.api.IBlueCrystal.AttachPostResponse;
+import com.crivano.blucservice.api.BlueCrystalContext;
 import com.crivano.blucservice.api.IBlueCrystal.IAttachPost;
 
 public class AttachPost implements IAttachPost {
@@ -12,7 +11,7 @@ public class AttachPost implements IAttachPost {
 	}
 
 	@Override
-	public void run(AttachPostRequest req, AttachPostResponse resp) throws Exception {
+	public void run(Request req, Response resp, BlueCrystalContext ctx) throws Exception {
 		byte[] attached = Utils.getBlucutil().attachContentsToPKCS7(req.content, req.envelope, req.time,
 				req.crl != null ? req.crl : false);
 

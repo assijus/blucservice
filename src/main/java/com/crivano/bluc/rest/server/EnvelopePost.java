@@ -1,8 +1,7 @@
 package com.crivano.bluc.rest.server;
 
+import com.crivano.blucservice.api.BlueCrystalContext;
 import com.crivano.blucservice.api.IBlueCrystal.CertDetails;
-import com.crivano.blucservice.api.IBlueCrystal.EnvelopePostRequest;
-import com.crivano.blucservice.api.IBlueCrystal.EnvelopePostResponse;
 import com.crivano.blucservice.api.IBlueCrystal.IEnvelopePost;
 import com.crivano.swaggerservlet.SwaggerUtils;
 
@@ -16,7 +15,7 @@ public class EnvelopePost implements IEnvelopePost {
 	}
 
 	@Override
-	public void run(EnvelopePostRequest req, EnvelopePostResponse resp) throws Exception {
+	public void run(Request req, Response resp, BlueCrystalContext ctx) throws Exception {
 
 		// Produce response
 		EnvelopeResponse enveloperesp = new EnvelopeResponse();

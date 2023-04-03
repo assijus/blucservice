@@ -6,9 +6,6 @@ import java.security.cert.X509Certificate;
 import java.util.Collection;
 import java.util.Date;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-
 import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.cms.CMSProcessable;
@@ -22,18 +19,7 @@ import org.bouncycastle.util.encoders.Base64;
 import org.json.JSONException;
 
 import com.crivano.blucservice.api.IBlueCrystal;
-import com.crivano.blucservice.api.IBlueCrystal.AttachPostRequest;
-import com.crivano.blucservice.api.IBlueCrystal.AttachPostResponse;
 import com.crivano.blucservice.api.IBlueCrystal.CertDetails;
-import com.crivano.blucservice.api.IBlueCrystal.CertificatePostRequest;
-import com.crivano.blucservice.api.IBlueCrystal.CertificatePostResponse;
-import com.crivano.blucservice.api.IBlueCrystal.EnvelopePostRequest;
-import com.crivano.blucservice.api.IBlueCrystal.EnvelopePostResponse;
-import com.crivano.blucservice.api.IBlueCrystal.HashPostRequest;
-import com.crivano.blucservice.api.IBlueCrystal.HashPostResponse;
-import com.crivano.blucservice.api.IBlueCrystal.ValidatePostRequest;
-import com.crivano.blucservice.api.IBlueCrystal.ValidatePostResponse;
-import com.crivano.swaggerservlet.SwaggerServlet;
 import com.crivano.swaggerservlet.SwaggerTestSupport;
 import com.crivano.swaggerservlet.SwaggerUtils;
 
@@ -64,8 +50,8 @@ public class BluCServiceTest extends SwaggerTestSupport {
 	}
 
 	public void testCertificate_Simple_Success() throws JSONException {
-		CertificatePostRequest req = new CertificatePostRequest();
-		CertificatePostResponse resp = new CertificatePostResponse();
+		IBlueCrystal.ICertificatePost.Request req = new IBlueCrystal.ICertificatePost.Request();
+		IBlueCrystal.ICertificatePost.Response resp = new IBlueCrystal.ICertificatePost.Response();
 
 		req.certificate = SwaggerUtils.base64Decode(certificate);
 		run("POST", "/certificate", req, resp);
@@ -123,8 +109,8 @@ public class BluCServiceTest extends SwaggerTestSupport {
 //	}
 
 	public void testValidate_ADRB21_Success() throws JSONException {
-		ValidatePostRequest req = new ValidatePostRequest();
-		ValidatePostResponse resp = new ValidatePostResponse();
+		IBlueCrystal.IValidatePost.Request req = new IBlueCrystal.IValidatePost.Request();
+		IBlueCrystal.IValidatePost.Response resp = new IBlueCrystal.IValidatePost.Response();
 
 		setProperty("threadpool.size", "20");
 
@@ -145,8 +131,8 @@ public class BluCServiceTest extends SwaggerTestSupport {
 	}
 
 	public void testAttach_PKCS7_Success() throws JSONException {
-		AttachPostRequest req = new AttachPostRequest();
-		AttachPostResponse resp = new AttachPostResponse();
+		IBlueCrystal.IAttachPost.Request req = new IBlueCrystal.IAttachPost.Request();
+		IBlueCrystal.IAttachPost.Response resp = new IBlueCrystal.IAttachPost.Response();
 
 		req.envelope = SwaggerUtils.base64Decode(attachPKCS7detached);
 		req.content = SwaggerUtils.base64Decode(attachPKCS7content);

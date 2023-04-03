@@ -2,9 +2,8 @@ package com.crivano.bluc.rest.server;
 
 import java.util.Map;
 
+import com.crivano.blucservice.api.BlueCrystalContext;
 import com.crivano.blucservice.api.IBlueCrystal.CertDetails;
-import com.crivano.blucservice.api.IBlueCrystal.CertificatePostRequest;
-import com.crivano.blucservice.api.IBlueCrystal.CertificatePostResponse;
 import com.crivano.blucservice.api.IBlueCrystal.ICertificatePost;
 import com.crivano.swaggerservlet.ISwaggerCacheableMethod;
 import com.crivano.swaggerservlet.Swagger;
@@ -19,7 +18,7 @@ public class CertificatePost implements ICertificatePost, ISwaggerCacheableMetho
 	}
 
 	@Override
-	public void run(CertificatePostRequest req, CertificatePostResponse resp) throws Exception {
+	public void run(Request req, Response resp, BlueCrystalContext ctx) throws Exception {
 		CertificateResponse certificateresp = new CertificateResponse();
 		Utils.getBlucutil().certificate(req.certificate, certificateresp);
 
