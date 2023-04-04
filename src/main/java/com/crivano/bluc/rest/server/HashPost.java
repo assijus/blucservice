@@ -1,8 +1,7 @@
 package com.crivano.bluc.rest.server;
 
+import com.crivano.blucservice.api.BlueCrystalContext;
 import com.crivano.blucservice.api.IBlueCrystal.CertDetails;
-import com.crivano.blucservice.api.IBlueCrystal.HashPostRequest;
-import com.crivano.blucservice.api.IBlueCrystal.HashPostResponse;
 import com.crivano.blucservice.api.IBlueCrystal.IHashPost;
 import com.crivano.swaggerservlet.SwaggerUtils;
 
@@ -16,7 +15,7 @@ public class HashPost implements IHashPost {
 	}
 
 	@Override
-	public void run(HashPostRequest req, HashPostResponse resp) throws Exception {
+	public void run(Request req, Response resp, BlueCrystalContext ctx) throws Exception {
 
 		// Produce response
 		HashResponse hashresp = new HashResponse();

@@ -1,9 +1,8 @@
 package com.crivano.bluc.rest.server;
 
+import com.crivano.blucservice.api.BlueCrystalContext;
 import com.crivano.blucservice.api.IBlueCrystal.CertDetails;
 import com.crivano.blucservice.api.IBlueCrystal.IValidatePost;
-import com.crivano.blucservice.api.IBlueCrystal.ValidatePostRequest;
-import com.crivano.blucservice.api.IBlueCrystal.ValidatePostResponse;
 import com.crivano.swaggerservlet.ISwaggerCacheableMethod;
 import com.crivano.swaggerservlet.SwaggerException;
 
@@ -17,7 +16,7 @@ public class ValidatePost implements IValidatePost, ISwaggerCacheableMethod {
 	}
 
 	@Override
-	public void run(ValidatePostRequest req, ValidatePostResponse resp) throws Exception {
+	public void run(Request req, Response resp, BlueCrystalContext ctx) throws Exception {
 		// Date dtSign = javax.xml.bind.DatatypeConverter.parseDateTime(time)
 		// .getTime();
 
